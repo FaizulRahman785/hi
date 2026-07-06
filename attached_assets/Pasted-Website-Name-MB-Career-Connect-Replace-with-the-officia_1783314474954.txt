@@ -1,0 +1,517 @@
+Website Name
+
+MB Career Connect (Replace with the official business name if different.)
+
+Tagline
+
+Empowering Careers Through Jobs, Internships, Skill Development, and Professional Connections.
+
+1. Homepage
+Hero Section
+Heading
+
+Build Your Career with Confidence
+
+Description
+
+Whether you're a student, fresher, or experienced professional, we help you discover verified job opportunities, internships, professional training, and career guidance. Connect with employers, enhance your skills, and take the next step toward your career goals.
+
+CTA Buttons
+Explore Jobs
+Find Internships
+Browse Courses
+Contact Us
+Statistics
+
+(Replace numbers later.)
+
+Registered Job Seekers
+Active Job Openings
+Internship Opportunities
+Hiring Companies
+Professional Mentors
+Courses Available
+Students Trained
+Successful Placements
+Our Services
+Job Placement
+
+Find verified full-time, part-time, and remote job opportunities across multiple industries.
+
+Internship Programs
+
+Gain practical experience through internships designed for students and fresh graduates.
+
+Professional Networking
+
+Connect with experienced professionals, recruiters, mentors, and hiring managers to expand your career opportunities.
+
+Career Guidance
+
+Receive personalized guidance for resume building, interview preparation, career planning, and professional growth.
+
+Skill Development
+
+Learn in-demand technical and professional skills through industry-oriented training programs.
+
+Air Ticketing & Travel Assistance
+
+Professional travel booking and ticketing services (display only if confirmed by the client).
+
+Why Choose Us
+Verified Opportunities
+Trusted Hiring Partners
+Career Guidance
+Internship Support
+Industry Connections
+Affordable Skill Development
+Dedicated Support Team
+Transparent Hiring Process
+Featured Opportunities
+
+Show latest opportunities with filters.
+
+Each card should display:
+
+Job Title
+
+Company Name
+
+Location
+
+Category
+
+Salary
+
+Employment Type
+
+Experience
+
+Application Deadline
+
+Apply Button
+
+Popular Categories
+Software Development
+Web Development
+Digital Marketing
+Sales
+Customer Support
+Telecalling
+Reception
+HR
+Finance
+Civil Engineering
+Mechanical Engineering
+Electrical Engineering
+Healthcare
+Hospitality
+Education
+Graphic Design
+Content Writing
+Data Entry
+Work From Home
+Remote Jobs
+Featured Courses
+
+Display:
+
+Course Name
+
+Duration
+
+Level
+
+Certificate
+
+Projects
+
+Placement Support
+
+Instructor
+
+Enroll Button
+
+Testimonials
+
+Student Photo
+
+Name
+
+Role
+
+Feedback
+
+Company Joined
+
+Latest Career Resources
+
+Articles
+
+Interview Tips
+
+Resume Writing
+
+LinkedIn Guide
+
+Career Roadmaps
+
+Placement Preparation
+
+Call to Action
+
+Start Your Career Journey Today
+
+Create your profile, explore opportunities, develop your skills, and connect with employers.
+
+2. About Us
+Company Overview
+
+Write something like:
+
+MB Career Connect is committed to helping students, fresh graduates, and professionals discover meaningful career opportunities through job placements, internships, career guidance, and professional networking. Our mission is to bridge the gap between talent and industry by providing trusted opportunities and continuous career support.
+
+Mission
+
+To empower individuals with career opportunities, practical skills, and industry connections that enable long-term professional success.
+
+Vision
+
+To become a trusted career development platform connecting talent with organizations worldwide.
+
+Core Values
+
+Integrity
+
+Transparency
+
+Professionalism
+
+Growth
+
+Innovation
+
+Community
+
+3. Jobs Page
+
+Each Job should contain
+
+Basic Information
+
+Job Title
+
+Job ID
+
+Category
+
+Department
+
+Company Name
+
+Company Logo
+
+Industry
+
+Posted Date
+
+Last Updated
+
+Employment Details
+
+Employment Type
+
+Work Mode
+
+Location
+
+Salary
+
+Vacancies
+
+Experience
+
+Qualification
+
+Shift
+
+Working Days
+
+Eligibility
+
+Minimum Education
+
+Passing Year
+
+Minimum Percentage
+
+CGPA
+
+Age
+
+Gender (if applicable)
+
+Language
+
+Technical Skills
+
+Soft Skills
+
+Responsibilities
+
+Daily tasks
+
+Project responsibilities
+
+Reporting manager
+
+Performance expectations
+
+Benefits
+
+Health Insurance
+
+Performance Bonus
+
+Flexible Hours
+
+Remote Work
+
+Learning Budget
+
+Paid Leave
+
+Certificate
+
+Career Growth
+
+Selection Process
+
+Application Review
+
+Assessment
+
+Technical Interview
+
+HR Interview
+
+Offer Letter
+
+Joining
+
+Important Dates
+
+Application Start
+
+Application Deadline
+
+Interview Date
+
+Joining Date
+
+Documents Required
+
+Resume
+
+Cover Letter
+
+Portfolio
+
+GitHub
+
+LinkedIn
+
+Certificates
+
+Identity Proof
+
+Contact Person
+
+Recruiter Name
+
+Email
+
+Phone
+
+WhatsApp
+
+Apply Button
+4. Internship Page
+
+Everything above plus
+
+Internship Duration
+
+Stipend
+
+PPO Available
+
+Training
+
+Certificate
+
+Flexible Hours
+
+College Eligibility
+
+5. Courses
+
+Each Course
+
+Course Name
+
+Category
+
+Level
+
+Duration
+
+Language
+
+Mode
+
+Price
+
+Discount
+
+Projects
+
+Assignments
+
+Certificate
+
+Placement Assistance
+
+Mentor
+
+Curriculum
+
+Reviews
+
+FAQs
+
+Enroll Button
+
+6. Professional Connections
+
+Mentor Name
+
+Designation
+
+Company
+
+Experience
+
+Specialization
+
+Languages
+
+Availability
+
+Book Session
+
+7. Hiring Partners
+
+Company Logo
+
+Industry
+
+Location
+
+Hiring Categories
+
+Active Openings
+
+Company Profile
+
+8. Career Resources
+
+Resume Templates
+
+Interview Questions
+
+HR Questions
+
+Technical Questions
+
+Career Roadmaps
+
+Salary Guide
+
+LinkedIn Tips
+
+Communication Skills
+
+Blogs
+
+9. Contact
+
+Phone
+
+Email
+
+WhatsApp
+
+Office Address
+
+Google Maps
+
+Business Hours
+
+Contact Form
+
+Social Media
+
+10. FAQ
+
+How do I apply?
+
+Are jobs verified?
+
+Do you charge placement fees?
+
+Can freshers apply?
+
+How do internships work?
+
+How do I enroll in courses?
+
+How do I contact recruiters?
+
+How do I become a hiring partner?
+
+User Dashboard
+My Profile
+Resume
+Saved Jobs
+Applied Jobs
+Application Status
+My Courses
+Certificates
+Notifications
+Messages
+Bookmarked Opportunities
+Account Settings
+Admin Panel
+
+The admin should be able to manage:
+
+Homepage content
+Jobs
+Internships
+Courses
+Companies
+Hiring Partners
+Mentors
+Categories
+Users
+Applications
+Testimonials
+Blog
+FAQs
+Contact Requests
+Newsletter Subscribers
+Site Settings
+SEO
+Analytics
+Media Library

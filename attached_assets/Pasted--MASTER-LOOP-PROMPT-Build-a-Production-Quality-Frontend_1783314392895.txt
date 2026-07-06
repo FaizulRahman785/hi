@@ -1,0 +1,342 @@
+# MASTER LOOP PROMPT — Build a Production-Quality Frontend (Coming Soon Version)
+
+You are a Senior Product Designer, Senior UI/UX Designer, Staff Frontend Engineer, and Product Strategist.
+
+Your objective is to design and build a premium, production-quality frontend only.
+
+This is NOT a backend task.
+
+Do NOT stop after completing one page. Continue improving every page, component, interaction, responsiveness, accessibility, animation, and user experience until the entire frontend reaches production quality.
+
+---
+
+## Mission
+
+Create a modern Career Growth Platform that provides:
+
+* Job Opportunities
+* Internships
+* Professional Connections
+* Mentorship
+* Hiring Partners
+* Courses
+* Career Guidance
+* Career Resources
+
+Since the backend is not ready, every feature that requires backend functionality must display a professional **Coming Soon** state instead of broken buttons or empty pages.
+
+---
+
+# Development Rules
+
+* Never stop after finishing one page.
+* Continuously review the project.
+* Improve spacing.
+* Improve typography.
+* Improve responsiveness.
+* Improve accessibility.
+* Improve animations.
+* Improve loading states.
+* Improve SEO.
+* Improve component consistency.
+* Refactor duplicated code.
+* Remove unused code.
+* Follow best frontend practices.
+* Continue iterating until every screen feels production-ready.
+
+---
+
+# Design Style
+
+Create a premium SaaS experience inspired by:
+
+* LinkedIn
+* Wellfound
+* Internshala
+* Notion
+* Linear
+* Stripe
+* Vercel
+
+The UI should feel modern, clean, trustworthy, and professional.
+
+---
+
+# Color Palette
+
+Primary:
+
+* Deep Blue
+* Indigo
+* White
+
+Accent:
+
+* Emerald
+* Sky Blue
+
+Neutral:
+
+* Gray scale
+
+Avoid excessive colors.
+
+---
+
+# Typography
+
+Professional font hierarchy.
+
+Large hero headings.
+
+Readable body text.
+
+Consistent spacing.
+
+---
+
+# Homepage
+
+Include:
+
+Hero Section
+
+Statistics
+
+Our Services
+
+Featured Opportunities
+
+Categories
+
+Latest Courses
+
+Mentors
+
+Hiring Partners
+
+Why Choose Us
+
+Testimonials
+
+FAQ
+
+Contact
+
+Newsletter
+
+Footer
+
+Where live data is unavailable, display attractive placeholder cards with a **Coming Soon** badge.
+
+---
+
+# Pages
+
+Create polished frontend pages for:
+
+* Home
+* About
+* Jobs
+* Internships
+* Courses
+* Mentors
+* Hiring Partners
+* Career Resources
+* Blog
+* Events
+* Scholarships
+* Dashboard
+* Login
+* Register
+* Profile
+* Notifications
+* Settings
+* Contact
+* FAQ
+* Privacy Policy
+* Terms & Conditions
+* 404 Page
+
+Every page must look complete, even if functionality is not yet implemented.
+
+---
+
+# Coming Soon System
+
+Every unavailable feature should have:
+
+* Professional Coming Soon illustration or icon
+* Friendly explanation
+* Optional email notification field (UI only)
+* "Coming Soon" badge
+* "Stay Tuned" message
+* Button that returns users to the homepage
+
+Never leave blank screens.
+
+---
+
+# Components
+
+Design reusable components for:
+
+* Navbar
+* Footer
+* Hero
+* Opportunity Cards
+* Course Cards
+* Mentor Cards
+* Company Cards
+* Testimonial Cards
+* Category Cards
+* Statistics Cards
+* Timeline
+* FAQ Accordion
+* Search Bar
+* Filters
+* Buttons
+* Inputs
+* Empty States
+* Skeleton Loaders
+* Coming Soon Cards
+* Modals
+* Toasts
+* Breadcrumbs
+* Pagination
+
+---
+
+# Responsive Design
+
+Perfect responsiveness for:
+
+* Mobile
+* Tablet
+* Laptop
+* Desktop
+* Ultra-wide screens
+
+No horizontal scrolling.
+
+---
+
+# Animations
+
+Use subtle, smooth animations.
+
+Include:
+
+* Fade
+* Slide
+* Hover
+* Scroll reveal
+* Card lift
+* Button ripple
+* Loading shimmer
+
+Animations should feel professional and never distracting.
+
+---
+
+# Accessibility
+
+Implement:
+
+* Semantic HTML
+* Keyboard navigation
+* Focus indicators
+* ARIA labels
+* Color contrast compliance
+* Screen reader support
+
+Aim for WCAG AA compliance.
+
+---
+
+# Performance
+
+Optimize for:
+
+* Fast loading
+* Lazy loading
+* Image optimization
+* Code splitting
+* Minimal bundle size
+
+Target high Lighthouse scores.
+
+---
+
+# SEO
+
+Prepare every page with:
+
+* Meta titles
+* Meta descriptions
+* Open Graph placeholders
+* Twitter Card placeholders
+* Structured heading hierarchy
+
+---
+
+# Code Quality
+
+Use:
+
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+* Framer Motion
+
+Structure the project with reusable components, clean folder organization, and maintainable code.
+
+---
+
+# UX Requirements
+
+Users should immediately understand:
+
+* What the platform offers
+* Why they should trust it
+* What actions they can take
+* Which features are coming soon
+
+Use clear calls to action throughout the site.
+
+---
+
+# Quality Checklist
+
+Before considering any page complete, verify:
+
+* Premium visual quality
+* Consistent spacing
+* Responsive layout
+* Accessible interactions
+* Smooth animations
+* No broken links
+* No placeholder lorem ipsum
+* Professional copy
+* Proper empty states
+* Proper Coming Soon states
+* No console errors
+
+---
+
+# Continuous Improvement Loop
+
+After every implementation cycle:
+
+1. Audit the entire frontend.
+2. Identify weak UI/UX areas.
+3. Refactor components where needed.
+4. Improve responsiveness.
+5. Improve accessibility.
+6. Improve animations.
+7. Improve performance.
+8. Improve visual consistency.
+9. Repeat until the frontend looks like a premium production-ready SaaS application.
+
+Do not stop after the first pass. Continue refining until there are no obvious UI, UX, responsiveness, accessibility, or design issues remaining.

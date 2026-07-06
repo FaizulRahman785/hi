@@ -1,0 +1,450 @@
+# MASTER LOOP PROMPT — Expand into a Complete Career, Student & Professional Ecosystem (Frontend Only)
+
+You are no longer building a simple job portal.
+
+You are building a complete **Career, Education, Learning, Networking, and Professional Growth Platform** for:
+
+* School Students
+* College Students
+* Freshers
+* Working Professionals
+* Freelancers
+* Alumni
+* Recruiters
+* Mentors
+* Companies
+* Educational Institutions
+
+The goal is to create a platform where users can discover opportunities, learn, connect, grow, and prepare for their careers.
+
+This phase is **frontend only**.
+
+Every feature that requires backend functionality must be implemented as a polished UI with a premium **Coming Soon** experience.
+
+Never leave empty pages or broken links.
+
+---
+
+# PRIMARY OBJECTIVE
+
+Design the platform as a modern ecosystem similar in scope to a combination of:
+
+* LinkedIn
+* Internshala
+* Wellfound
+* Coursera
+* GitHub
+* LeetCode
+* Unstop
+* HackerRank
+* Figma Community
+
+The website should feel like a destination users return to regularly for opportunities, learning, networking, and career growth.
+
+---
+
+# NEW MAIN NAVIGATION
+
+Include the following top-level navigation items:
+
+* Home
+* Jobs
+* Internships
+* Courses
+* Student Resources
+* College Hub
+* Freelance
+* Alumni Network
+* Mentors
+* Companies
+* Scholarships
+* Events
+* Hackathons
+* Blogs
+* Career Resources
+* Community
+* Success Stories
+* Contact
+
+Every page must be visually complete.
+
+---
+
+# STUDENT RESOURCES
+
+Create a dedicated Student Resources hub.
+
+Sections include:
+
+Academic Resources
+
+* Notes
+* Previous Year Papers
+* Syllabus
+* Lab Manuals
+* Practical Files
+* Assignments
+* Study Material
+* Formula Sheets
+
+Career Resources
+
+* Resume Templates
+* ATS Resume Guide
+* Cover Letter Templates
+* LinkedIn Profile Guide
+* Portfolio Guide
+* GitHub Guide
+
+Interview Resources
+
+* HR Questions
+* Technical Questions
+* Aptitude
+* Logical Reasoning
+* Mock Interviews
+* Group Discussion
+
+Coding Resources
+
+* DSA Sheets
+* Coding Challenges
+* Problem Lists
+* Project Ideas
+* Roadmaps
+* Open Source Guide
+
+AI Resources
+
+* AI Tools Directory
+* Prompt Library
+* Productivity Tools
+* Learning Resources
+
+All pages should display **Coming Soon** while maintaining a premium UI.
+
+---
+
+# COLLEGE HUB
+
+Create a complete College Hub.
+
+Include:
+
+* College Profiles
+* Department Pages
+* Campus Placement
+* College Notices
+* Student Clubs
+* Coding Clubs
+* Innovation Cells
+* Incubation Centres
+* Events
+* Workshops
+* Seminars
+* Training Programs
+* Placement Calendar
+
+Frontend only.
+
+---
+
+# ALUMNI NETWORK
+
+Create a premium Alumni section.
+
+Include:
+
+* Featured Alumni
+* Alumni Stories
+* Alumni Companies
+* Alumni Achievements
+* Alumni Mentorship
+* Connect with Alumni
+* Alumni Events
+
+Each profile contains:
+
+* Name
+* Graduation Year
+* Department
+* Current Company
+* Current Role
+* Skills
+* Achievements
+* LinkedIn Placeholder
+* Book Mentorship (Coming Soon)
+
+---
+
+# TOPPERS & ACHIEVERS
+
+Dedicated showcase page.
+
+Categories:
+
+* Academic Toppers
+* Placement Achievers
+* Internship Achievers
+* Startup Founders
+* Freelance Success
+* Open Source Contributors
+* Hackathon Winners
+* Research Achievements
+* Scholarship Winners
+* Competitive Exam Achievers
+
+Each card should include:
+
+* Photo placeholder
+* Achievement
+* Story
+* Tips
+* Timeline
+* Featured badge
+
+---
+
+# FREELANCER HUB
+
+Create a Freelancer section.
+
+Include:
+
+* Web Development
+* Mobile Apps
+* UI/UX Design
+* Graphic Design
+* AI & ML
+* Data Science
+* Content Writing
+* Video Editing
+* Digital Marketing
+* SEO
+* Automation
+* Consulting
+
+Pages:
+
+Find Freelancers
+
+Hire Talent
+
+Become a Freelancer
+
+Projects
+
+Pricing Guide
+
+Freelancer Community
+
+Portfolio Showcase
+
+Everything displays Coming Soon.
+
+---
+
+# COMMUNITY
+
+Create a Community section.
+
+Include:
+
+* Discussion Forums
+* Study Groups
+* Coding Community
+* Startup Community
+* AI Community
+* College Community
+* Developer Community
+* Events
+* Meetups
+
+Frontend only.
+
+---
+
+# SCHOLARSHIPS
+
+Dedicated page.
+
+Categories:
+
+* Government Scholarships
+* Private Scholarships
+* International Scholarships
+* Merit Scholarships
+* Need-Based Scholarships
+
+Each card includes:
+
+* Eligibility
+* Benefits
+* Deadline
+* Category
+* Apply (Coming Soon)
+
+---
+
+# HACKATHONS & COMPETITIONS
+
+Sections:
+
+* Hackathons
+* Coding Contests
+* Design Challenges
+* Startup Competitions
+* AI Challenges
+* Innovation Challenges
+
+Premium cards with:
+
+* Prize Pool
+* Eligibility
+* Deadline
+* Organizer
+* Register (Coming Soon)
+
+---
+
+# EVENTS
+
+Include:
+
+* Workshops
+* Webinars
+* Career Fair
+* Placement Drive
+* Meetups
+* Tech Talks
+* Conferences
+
+Frontend only.
+
+---
+
+# SUCCESS STORIES
+
+Create beautiful pages for:
+
+* Placement Stories
+* Internship Stories
+* Startup Stories
+* Freelancer Stories
+* Alumni Stories
+
+Premium storytelling layout.
+
+---
+
+# BLOG & KNOWLEDGE CENTER
+
+Professional blog categories:
+
+* Career Tips
+* Interview Tips
+* AI
+* Programming
+* Resume
+* Freelancing
+* Startup
+* Productivity
+* Technology News
+
+Display placeholder articles with Coming Soon.
+
+---
+
+# CAREER TOOLS
+
+Prepare UI for:
+
+* Resume Builder
+* ATS Checker
+* Cover Letter Builder
+* Salary Calculator
+* CGPA Calculator
+* Interview Preparation
+* Career Roadmaps
+
+Each opens a premium Coming Soon page.
+
+---
+
+# USER DASHBOARD (UI ONLY)
+
+Design polished dashboard pages:
+
+* Profile
+* My Applications
+* Saved Jobs
+* Saved Courses
+* Saved Resources
+* Bookmarks
+* Certificates
+* Notifications
+* Messages
+* Settings
+* Activity
+
+Display realistic placeholder content.
+
+---
+
+# COMING SOON EXPERIENCE
+
+Every unfinished feature must include:
+
+* Hero section
+* Beautiful illustration
+* Feature overview
+* Benefits
+* FAQ
+* Roadmap timeline
+* "Coming Soon" badge
+* Email notification UI
+* Suggested related pages
+* Back button
+* Continue exploring CTA
+
+Never use blank pages.
+
+---
+
+# DESIGN CONSISTENCY
+
+Every new page must match the existing design system.
+
+Maintain:
+
+* identical spacing
+* typography
+* card design
+* button styles
+* animations
+* hover effects
+* Aurora visual language
+* theme compatibility
+
+No page should feel disconnected.
+
+---
+
+# CONTINUOUS IMPROVEMENT LOOP
+
+After implementing each new section:
+
+1. Audit the entire application.
+2. Verify navigation.
+3. Improve layouts.
+4. Improve responsiveness.
+5. Improve accessibility.
+6. Improve typography.
+7. Improve animations.
+8. Improve consistency.
+9. Remove duplication.
+10. Refine the visual hierarchy.
+11. Ensure every page is production-ready.
+12. Repeat until the platform feels like a complete, investor-ready Career & Student Ecosystem.
+
+Do not stop after creating pages. Continue refining until every screen feels polished, cohesive, and professionally designed.

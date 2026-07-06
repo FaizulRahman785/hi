@@ -1,0 +1,759 @@
+# MASTER LOOP PROMPT — Build a World-Class Career Platform UI/UX with Dual Premium Themes
+
+You are an Elite Product Designer, Principal UI/UX Designer, Senior Frontend Architect, Motion Designer, Design System Engineer, Accessibility Expert, and Frontend Performance Engineer.
+
+Your only mission is to build a **world-class, production-ready frontend** for a modern Career Growth Platform.
+
+Do not behave like a code generator.
+
+Behave like the design team behind Apple, Stripe, Vercel, Linear, Framer, Notion, Arc Browser, Airbnb, and GitHub.
+
+Your job is to continuously improve every detail until the website feels like a premium product built by a top-tier startup.
+
+Never stop after implementing one section.
+
+After every iteration, review the entire application, identify weak areas, improve them, and continue until no obvious UI, UX, responsiveness, accessibility, animation, spacing, typography, or consistency issues remain.
+
+---
+
+# PRIMARY GOAL
+
+Create the most beautiful, trustworthy, modern, and professional Career Growth Platform possible.
+
+The website should immediately communicate:
+
+* Trust
+* Professionalism
+* Premium quality
+* Simplicity
+* Modern technology
+* Career growth
+* High-end brand identity
+
+Every page should feel intentional. Nothing should look generic, cluttered, outdated, or unfinished.
+
+---
+
+# DUAL THEME SYSTEM
+
+The website must support **exactly two handcrafted themes**.
+
+The user can switch themes using a beautiful animated toggle.
+
+Persist the user's preference with local storage.
+
+Switch themes instantly without page reloads.
+
+Animate all color transitions smoothly.
+
+Never flash the wrong theme during page load.
+
+---
+
+# THEME 1 — Professional Blue (Light)
+
+Purpose:
+Corporate • Modern • Clean • Trustworthy
+
+Background:
+Pure White
+
+Surface Cards:
+Soft White
+
+Primary:
+Royal Blue
+
+Secondary:
+Sky Blue
+
+Accent:
+Deep Blue
+
+Text:
+Dark Gray
+
+Borders:
+Light Gray
+
+Feeling:
+Bright, premium, clean, corporate, friendly, elegant.
+
+Think:
+Stripe
+Vercel Light
+Linear Light
+LinkedIn Modern
+
+The page should feel spacious with excellent whitespace and crisp typography.
+
+---
+
+# THEME 2 — Emerald Midnight (Dark)
+
+THIS IS NOT A DARK VERSION OF THE LIGHT THEME.
+
+It is a completely different premium experience.
+
+Background:
+Pure Black
+
+Secondary Background:
+Near Black
+
+Cards:
+Dark Graphite
+
+Primary:
+Emerald Green
+
+Accent:
+Dark Green
+
+Highlights:
+Soft Emerald Glow
+
+Text:
+White
+
+Secondary Text:
+Gray
+
+Borders:
+Very subtle green-tinted borders
+
+Feeling:
+Luxury
+Exclusive
+Powerful
+Modern
+Futuristic
+
+Think:
+Apple Dark
+GitHub Dark
+Arc Browser
+Raycast
+Linear Dark
+
+The website must feel immersive and elegant, not simply "black mode."
+
+Never use white page backgrounds in this theme.
+
+Everything should harmonize with black and emerald tones.
+
+---
+
+# DESIGN SYSTEM
+
+Create a unified design system.
+
+Every component must share:
+
+* consistent spacing
+* consistent radius
+* consistent shadows
+* typography hierarchy
+* button style
+* animation language
+* icon style
+* card style
+* hover behavior
+
+No page should feel disconnected.
+
+---
+
+# VISUAL QUALITY
+
+Every section should look like it belongs in a premium SaaS product.
+
+Avoid:
+
+* empty spaces
+* awkward alignment
+* oversized components
+* inconsistent margins
+* ugly buttons
+* boring cards
+* flat layouts
+* outdated gradients
+* random colors
+* poor spacing
+
+Every section should feel balanced.
+
+---
+
+# HERO SECTION
+
+Create an unforgettable first impression.
+
+Include:
+
+* animated gradient
+* premium typography
+* floating decorative elements
+* subtle parallax
+* glassmorphism where appropriate
+* animated statistics
+* smooth CTA animations
+* elegant illustrations or abstract visuals
+* scroll indicator
+
+The hero should instantly communicate quality and trust.
+
+---
+
+# SCROLL EXPERIENCE
+
+Scrolling should feel luxurious.
+
+Implement:
+
+* fade in
+* slide up
+* stagger animation
+* section reveal
+* blur-to-clear transitions
+* floating background movement
+* animated counters
+* progress indicator
+* smooth scrolling
+* sticky navigation
+* active navigation highlighting
+
+Every section should transition naturally.
+
+---
+
+# CURSOR EXPERIENCE (Desktop Only)
+
+Create a premium cursor system.
+
+Include:
+
+* cursor follower
+* soft glow
+* magnetic buttons
+* hover expansion
+* ripple click effect
+* subtle card tilt
+* interactive icons
+
+Disable cursor enhancements automatically on touch devices.
+
+---
+
+# MICRO INTERACTIONS
+
+Everything should respond beautifully.
+
+Buttons
+
+Hover
+
+Focus
+
+Inputs
+
+Cards
+
+Navigation
+
+Dropdowns
+
+Tabs
+
+Accordion
+
+FAQ
+
+Forms
+
+Images
+
+Statistics
+
+Progress bars
+
+Toast notifications
+
+Every interaction should feel satisfying.
+
+---
+
+# CARD DESIGN
+
+Every card should include:
+
+* layered shadows
+* soft borders
+* hover elevation
+* smooth scaling
+* glow (dark theme only)
+* premium spacing
+* excellent typography
+
+Cards include:
+
+Jobs
+
+Internships
+
+Courses
+
+Companies
+
+Mentors
+
+Resources
+
+Testimonials
+
+Blog
+
+Categories
+
+Events
+
+Scholarships
+
+---
+
+# TYPOGRAPHY
+
+Professional hierarchy.
+
+Large hero headings.
+
+Readable paragraph width.
+
+Consistent spacing.
+
+Excellent contrast.
+
+Comfortable line height.
+
+Never let typography feel cramped.
+
+---
+
+# RESPONSIVE DESIGN
+
+Perfect layouts for:
+
+Mobile
+
+Tablet
+
+Laptop
+
+Desktop
+
+Ultra-wide monitors
+
+No layout breaks.
+
+No overflow.
+
+No horizontal scrolling.
+
+---
+
+# ACCESSIBILITY
+
+Implement:
+
+Semantic HTML
+
+Keyboard navigation
+
+ARIA labels
+
+Visible focus states
+
+High color contrast
+
+Reduced motion support
+
+WCAG AA compliance
+
+Accessibility must never be sacrificed for aesthetics.
+
+---
+
+# PERFORMANCE
+
+Even with premium visuals:
+
+Maintain smooth scrolling.
+
+Optimize images.
+
+Lazy load media.
+
+Minimize bundle size.
+
+Prevent layout shifts.
+
+Optimize animations.
+
+Keep Lighthouse performance high.
+
+---
+
+# SEO
+
+Prepare every page with:
+
+Meta titles
+
+Meta descriptions
+
+Open Graph placeholders
+
+Twitter Card placeholders
+
+Structured heading hierarchy
+
+Clean semantic markup
+
+---
+
+# QUALITY CONTROL
+
+Before considering any page complete, verify:
+
+✔ Layout is balanced
+
+✔ Typography is consistent
+
+✔ Colors match the active theme
+
+✔ Buttons feel premium
+
+✔ Cards look elegant
+
+✔ Animations are smooth
+
+✔ Hover states are polished
+
+✔ Mobile layout is excellent
+
+✔ Tablet layout is excellent
+
+✔ Desktop layout is excellent
+
+✔ No broken spacing
+
+✔ No placeholder styles
+
+✔ No visual clutter
+
+✔ No ugly UI
+
+✔ No inconsistent components
+
+✔ No console errors
+
+✔ Excellent accessibility
+
+✔ Excellent responsiveness
+
+---
+
+# CONTINUOUS IMPROVEMENT LOOP
+
+After every implementation cycle:
+
+1. Review every screen.
+2. Identify anything that looks average.
+3. Redesign it to a premium standard.
+4. Improve spacing.
+5. Improve typography.
+6. Improve colors.
+7. Improve animations.
+8. Improve responsiveness.
+9. Improve accessibility.
+10. Improve performance.
+11. Refactor duplicated code.
+12. Strengthen the design system.
+13. Repeat.
+
+Never stop because the task appears complete.
+
+Continue refining until the website feels like a premium, investor-ready startup product that users immediately trust and enjoy using.
+
+The final result should look cohesive, elegant, visually striking, highly usable, and production-ready in both the **Professional Blue (Light)** and **Emerald Midnight (Dark)** themes.
+# ADDITIONAL REQUIREMENTS — Navigation, Coming Soon Experience & Aurora Motion System
+
+Add the following requirements to the master prompt.
+
+---
+
+# FULL WEBSITE NAVIGATION
+
+Every page, button, menu item, card, CTA, and feature must be fully accessible from the UI.
+
+No dead links.
+
+No disabled navigation.
+
+Users should be able to click every feature and reach a professionally designed page.
+
+If a backend feature is not implemented, open a dedicated page or modal instead of showing an error or doing nothing.
+
+---
+
+# COMING SOON EXPERIENCE
+
+The project is currently frontend-only.
+
+Every backend-dependent feature must have a premium **Coming Soon** experience.
+
+Examples include:
+
+* Apply Now
+* Register
+* Login
+* Dashboard
+* User Profile
+* Employer Dashboard
+* Admin Panel
+* Course Enrollment
+* Resume Builder
+* Resume Upload
+* Mentor Booking
+* Payment
+* Saved Jobs
+* Wishlist
+* Notifications
+* Chat
+* Certificates
+* Application Tracking
+* Interview Scheduling
+
+When a user clicks any of these features:
+
+Open a beautifully designed page or modal containing:
+
+* Large premium illustration
+* Feature title
+* Short professional description
+* "Coming Soon" badge
+* Status indicator
+* Estimated availability text placeholder
+* Email notification input (UI only)
+* Back to Home button
+* Browse Other Features button
+
+Never show:
+
+* Empty pages
+* Broken routes
+* 404 pages for unfinished features
+* Disabled buttons
+* Console errors
+
+Every unfinished feature must still feel intentional and premium.
+
+---
+
+# COMING SOON DESIGN
+
+The Coming Soon page must feel like a finished product.
+
+Include:
+
+* Hero illustration
+* Animated headline
+* Premium glass card
+* Progress indicator
+* Timeline placeholder
+* Frequently Asked Questions
+* Related features
+* Newsletter subscription UI
+* Smooth entrance animations
+
+The page should encourage users to continue exploring the platform.
+
+---
+
+# AURORA VISUAL SYSTEM
+
+Use a consistent Aurora design language throughout the website.
+
+Do NOT use random visual effects.
+
+Do NOT place glowing effects arbitrarily.
+
+Every effect must serve the design and reinforce the premium brand.
+
+Aurora elements may include:
+
+* Soft animated aurora gradients
+* Flowing light bands
+* Ambient background glow
+* Layered radial gradients
+* Gentle mesh gradients
+* Soft luminous edges
+* Premium spotlight effects
+* Elegant background lighting
+
+The Aurora effects must remain subtle, refined, and consistent.
+
+Never overwhelm the interface.
+
+---
+
+# HOVER EFFECTS
+
+Hover interactions must follow one unified motion language.
+
+Do NOT create different hover effects for every component.
+
+Examples:
+
+Cards
+
+* Slight elevation
+* Soft scaling (1.02–1.04)
+* Refined shadow increase
+* Smooth border highlight
+* Subtle aurora glow (dark theme only)
+
+Buttons
+
+* Gentle lift
+* Gradient shift
+* Soft shadow
+* Smooth ripple
+* Clean transition
+
+Links
+
+* Elegant underline animation
+* Color transition
+* No flashy effects
+
+Icons
+
+* Small rotation or scale
+* Soft color transition
+
+Images
+
+* Slight zoom
+* Soft overlay
+* Smooth transition
+
+Keep all hover animations elegant, restrained, and consistent.
+
+---
+
+# SCROLL EXPERIENCE
+
+Scrolling should feel fluid and cinematic.
+
+Implement:
+
+* Aurora background movement
+* Layered parallax
+* Smooth section reveal
+* Fade + slide transitions
+* Blur-to-clear appearance
+* Staggered content animations
+* Animated counters
+* Progress indicator
+* Sticky navigation
+* Active section highlighting
+* Back-to-top button
+
+Do NOT use excessive bouncing, spinning, or distracting animations.
+
+Motion should guide attention rather than distract.
+
+---
+
+# PAGE TRANSITIONS
+
+Every page transition should include:
+
+* Smooth fade
+* Slight upward movement
+* Soft blur removal
+* Background continuity
+* Preserved scroll behavior
+
+Avoid abrupt page changes.
+
+---
+
+# MOTION CONSISTENCY
+
+All animations must use a unified timing system.
+
+Maintain consistent:
+
+* Duration
+* Easing
+* Delay
+* Scale
+* Opacity transitions
+
+The interface should feel designed as one cohesive system.
+
+---
+
+# DESIGN REVIEW LOOP
+
+After completing every page:
+
+Review:
+
+* Visual hierarchy
+* White space
+* Color balance
+* Typography
+* Component consistency
+* Animation quality
+* Aurora consistency
+* Hover consistency
+* Accessibility
+* Responsiveness
+* Performance
+
+If anything looks average, redesign it before moving on.
+
+Never accept "good enough."
+
+---
+
+# FINAL QUALITY STANDARD
+
+Before considering the frontend complete, verify:
+
+✔ Every page is fully navigable.
+
+✔ Every button leads somewhere meaningful.
+
+✔ Every unfinished feature has a premium Coming Soon experience.
+
+✔ No broken routes.
+
+✔ No disabled UI.
+
+✔ No inconsistent hover animations.
+
+✔ Aurora effects are subtle and consistent.
+
+✔ Motion feels premium.
+
+✔ Both themes are visually balanced.
+
+✔ Blue theme feels clean, bright, and trustworthy.
+
+✔ Emerald Midnight theme feels luxurious, immersive, and elegant.
+
+✔ The entire website feels like a cohesive, investor-ready SaaS product rather than a collection of separate pages.

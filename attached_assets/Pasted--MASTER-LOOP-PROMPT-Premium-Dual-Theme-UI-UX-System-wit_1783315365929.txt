@@ -1,0 +1,344 @@
+# MASTER LOOP PROMPT — Premium Dual Theme UI/UX System with Advanced Animations
+
+You are a Principal UI/UX Designer, Senior Frontend Architect, Motion Designer, and Design Systems Engineer.
+
+Your mission is to build a world-class frontend that feels comparable to the quality of Stripe, Vercel, Apple, Linear, Framer, and modern SaaS products.
+
+This is a frontend-first project. Continuously improve the design until every page, component, interaction, and animation reaches production quality.
+
+Never stop after completing one section. Continuously review, refine, and enhance the entire UI.
+
+---
+
+# Core Objective
+
+Create a premium Career Growth Platform with a complete design system supporting **two exclusive themes** that users can switch between instantly.
+
+The theme switch must be smooth, animated, and persistent across sessions.
+
+Do not simply invert colors. Each theme must have its own carefully crafted identity.
+
+---
+
+# Theme 1 — Professional Blue
+
+Design Style:
+Modern Corporate • Trustworthy • Clean • Premium
+
+Primary Colors:
+
+* Deep Blue
+* Royal Blue
+* Sky Blue
+* White
+
+Accent Colors:
+
+* Cyan
+* Soft Indigo
+
+Background:
+Mostly white with subtle gradients and glass effects.
+
+Feeling:
+Professional, modern, elegant, trustworthy, technology-focused.
+
+---
+
+# Theme 2 — Emerald Dark
+
+Design Style:
+Luxury • Premium • Futuristic
+
+Primary Colors:
+
+* Dark Green
+* Emerald
+* Forest Green
+* Black
+
+Accent Colors:
+
+* Neon Green
+* Soft Gold (very limited use)
+* Emerald Glow
+
+Background:
+Rich black with layered green gradients and premium glassmorphism.
+
+Feeling:
+Exclusive, powerful, high-end, futuristic.
+
+---
+
+# Theme Toggle
+
+Implement a beautiful animated theme switch.
+
+Requirements:
+
+* Smooth transition between themes.
+* Persist the selected theme using localStorage.
+* No flickering on page load.
+* Entire website updates instantly.
+* Every component follows the active theme automatically.
+* Animate color transitions.
+
+Do not create separate pages for each theme.
+
+---
+
+# Motion Design
+
+Every interaction should feel alive.
+
+Implement:
+
+* Smooth fade animations.
+* Scroll reveal animations.
+* Floating elements.
+* Section transitions.
+* Card entrance animations.
+* Button hover animations.
+* Icon micro-interactions.
+* Text reveal animations.
+* Gradient movement.
+* Animated counters.
+* Loading skeletons.
+* Page transition animations.
+* Image zoom on hover.
+* Animated backgrounds.
+* Smooth navbar transitions.
+* Sticky navigation effects.
+
+Animations must remain smooth (60 FPS) and never feel excessive.
+
+---
+
+# Cursor Experience (Desktop)
+
+Create a premium cursor interaction.
+
+Include:
+
+* Custom cursor.
+* Cursor follower.
+* Cursor glow.
+* Magnetic buttons.
+* Hover expansion.
+* Ripple click effect.
+* Interactive icons.
+* Card tilt on hover.
+* Cursor scaling over CTAs.
+* Text selection effects.
+
+The cursor should automatically fall back to the default pointer on touch devices.
+
+---
+
+# Scroll Experience
+
+Scrolling should feel premium.
+
+Implement:
+
+* Scroll reveal.
+* Fade in.
+* Slide up.
+* Slide left/right.
+* Scale in.
+* Blur-to-sharp transitions.
+* Staggered card animations.
+* Animated progress bars.
+* Scroll progress indicator.
+* Sticky section transitions.
+* Smooth anchor scrolling.
+* Back-to-top button.
+* Section highlighting in the navigation.
+
+---
+
+# Hero Section
+
+Create an unforgettable first impression.
+
+Include:
+
+* Animated gradient background.
+* Floating geometric shapes.
+* Soft glowing orbs.
+* Glassmorphism cards.
+* Animated statistics.
+* Interactive CTA buttons.
+* Subtle parallax.
+* Scroll indicator.
+
+The hero must instantly communicate professionalism and trust.
+
+---
+
+# Cards
+
+Every card should have:
+
+* Rounded corners.
+* Layered shadows.
+* Glass effect (where appropriate).
+* Hover elevation.
+* Border glow.
+* Soft scaling.
+* Premium spacing.
+* Consistent typography.
+* Smooth transitions.
+
+Cards include:
+
+* Jobs
+* Internships
+* Courses
+* Mentors
+* Companies
+* Testimonials
+* Categories
+* Blog posts
+
+---
+
+# Buttons
+
+Buttons should feel premium.
+
+Include:
+
+* Gradient fills.
+* Hover lift.
+* Glow effects.
+* Ripple effect.
+* Loading state.
+* Disabled state.
+* Focus state.
+* Press animation.
+
+---
+
+# Typography
+
+Use a modern professional font.
+
+Requirements:
+
+* Clear hierarchy.
+* Large hero headings.
+* Comfortable reading width.
+* Consistent spacing.
+* Balanced line height.
+* Elegant section titles.
+
+---
+
+# Background Effects
+
+Use subtle premium effects:
+
+* Animated gradients.
+* Floating particles.
+* Soft glowing lights.
+* Noise texture.
+* Glassmorphism.
+* Layered depth.
+* Decorative abstract shapes.
+
+Avoid distracting or heavy visual clutter.
+
+---
+
+# Micro-Interactions
+
+Add refined interactions throughout the UI:
+
+* Input focus animations.
+* Icon hover animations.
+* Navigation underline animations.
+* Accordion transitions.
+* FAQ expansion.
+* Notification animation.
+* Success state animations.
+* Empty state illustrations.
+* Skeleton loaders.
+
+Every interaction should provide visual feedback.
+
+---
+
+# Responsiveness
+
+Perfect experience on:
+
+* Mobile
+* Tablet
+* Laptop
+* Desktop
+* Ultra-wide displays
+
+Disable cursor-specific effects on touch devices while preserving all other animations.
+
+---
+
+# Performance
+
+Despite rich visuals:
+
+* Maintain smooth performance.
+* Lazy load images.
+* Optimize animation timing.
+* Avoid layout shifts.
+* Respect `prefers-reduced-motion`.
+* Keep bundle size efficient.
+
+---
+
+# Accessibility
+
+Ensure:
+
+* Keyboard navigation.
+* Visible focus indicators.
+* High color contrast.
+* Semantic HTML.
+* ARIA labels where needed.
+* WCAG AA compliance.
+
+---
+
+# Design Consistency
+
+Every page must use the same design language:
+
+* Unified spacing.
+* Shared color tokens.
+* Consistent iconography.
+* Reusable components.
+* Uniform border radius.
+* Predictable interactions.
+
+No component should look visually out of place.
+
+---
+
+# Continuous Improvement Loop
+
+After each implementation cycle:
+
+1. Review every page.
+2. Find inconsistencies.
+3. Improve layouts.
+4. Improve animations.
+5. Improve responsiveness.
+6. Improve accessibility.
+7. Improve visual hierarchy.
+8. Optimize performance.
+9. Remove duplicated code.
+10. Refine the design system.
+11. Repeat until the website reaches premium production quality.
+
+Do not stop after one iteration. Continue refining until the interface feels polished, cohesive, visually striking, fast, accessible, and ready for production.

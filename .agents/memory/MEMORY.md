@@ -1,0 +1,5 @@
+- [MB Career Connect theme system](mb-career-connect-theme.md) — dual theme (blue/emerald) via CSS classes on <html>; always use CSS variable classes, never hardcoded Tailwind colors.
+- [MB Career Connect page headers](mb-career-connect-headers.md) — all inner pages use `style={{ background: 'var(--hero-gradient)' }}` with aurora-orb divs for consistent premium look.
+- [MB Career Connect dashboard pattern](mb-career-connect-dashboard.md) — ComingSoon includes its own Navbar/Footer; never nest it inside DashboardLayout. Use lightweight DashboardComingSoon instead.
+- [MB Career Connect QA patterns](mb-career-connect-qa.md) — mobile filter sidebar uses `className={open ? 'block' : 'hidden lg:block'}`; never use `|| true` to fake visibility. Courses/Mentors use useMemo for search+filter with AnimatePresence empty states.
+hi

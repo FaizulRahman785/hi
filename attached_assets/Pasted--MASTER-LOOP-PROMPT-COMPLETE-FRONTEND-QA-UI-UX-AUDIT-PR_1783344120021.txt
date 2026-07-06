@@ -1,0 +1,775 @@
+# MASTER LOOP PROMPT — COMPLETE FRONTEND QA, UI/UX AUDIT & PRODUCTION READINESS
+
+You are now entering **Final Production QA Mode**.
+
+Your role is no longer to build new features.
+
+Your role is to become an entire frontend review team consisting of:
+
+* Principal Frontend Architect
+* Senior UI Designer
+* Senior UX Researcher
+* Staff Frontend Engineer
+* QA Automation Engineer
+* Manual QA Engineer
+* Accessibility Specialist
+* Motion Designer
+* Responsive Design Expert
+* Performance Engineer
+* Design System Architect
+* SEO Specialist
+* Product Designer
+* Code Reviewer
+
+Your mission is to inspect, test, review, optimize, polish, and perfect the entire frontend before production.
+
+Do not assume anything is correct.
+
+Verify everything.
+
+If something looks average, improve it.
+
+If something feels inconsistent, redesign it.
+
+If something can be optimized, optimize it.
+
+Never stop after finding one issue.
+
+Continue until there are no significant UI, UX, accessibility, responsiveness, animation, performance, navigation, or code-quality problems remaining.
+
+---
+
+# PRIMARY OBJECTIVE
+
+Deliver a frontend that feels production-ready, polished, cohesive, accessible, responsive, performant, and professional.
+
+The result should feel comparable to modern SaaS products.
+
+---
+
+# COMPLETE WEBSITE AUDIT
+
+Inspect every:
+
+Page
+
+Section
+
+Component
+
+Button
+
+Card
+
+Form
+
+Modal
+
+Dropdown
+
+Navbar
+
+Footer
+
+Animation
+
+Icon
+
+Image
+
+Typography
+
+Spacing
+
+Theme
+
+Responsive Layout
+
+Navigation
+
+Hover State
+
+Scroll Animation
+
+Cursor Interaction
+
+Loading State
+
+Empty State
+
+Coming Soon Page
+
+Dashboard
+
+Authentication Screen
+
+Error Page
+
+404 Page
+
+Settings Page
+
+Every single screen.
+
+Nothing should be skipped.
+
+---
+
+# DESIGN SYSTEM AUDIT
+
+Verify that every component follows the design system.
+
+Check:
+
+Spacing
+
+Border Radius
+
+Shadow
+
+Typography
+
+Color Palette
+
+Icon Style
+
+Button Style
+
+Input Style
+
+Card Style
+
+Motion Language
+
+Glassmorphism
+
+Aurora Effects
+
+Hover States
+
+Focus States
+
+Transitions
+
+If anything differs, refactor it.
+
+---
+
+# UI CONSISTENCY
+
+Review every screen.
+
+Ensure:
+
+No ugly layouts.
+
+No empty spaces.
+
+No oversized components.
+
+No cramped content.
+
+No inconsistent margins.
+
+No inconsistent padding.
+
+No broken alignment.
+
+No uneven grids.
+
+No stretched images.
+
+No blurry assets.
+
+No inconsistent icon sizes.
+
+No inconsistent card sizes.
+
+No inconsistent button sizes.
+
+Everything should feel visually balanced.
+
+---
+
+# UX REVIEW
+
+Evaluate every user journey.
+
+Check:
+
+Navigation clarity
+
+CTA placement
+
+Visual hierarchy
+
+Discoverability
+
+Readability
+
+Information architecture
+
+Interaction feedback
+
+Error prevention
+
+Task completion
+
+User confidence
+
+Trust signals
+
+Accessibility
+
+Professional appearance
+
+Improve any confusing workflow.
+
+---
+
+# RESPONSIVE TESTING
+
+Test every page on:
+
+320px
+
+360px
+
+375px
+
+390px
+
+414px
+
+480px
+
+576px
+
+640px
+
+768px
+
+820px
+
+912px
+
+1024px
+
+1280px
+
+1366px
+
+1440px
+
+1536px
+
+1600px
+
+1728px
+
+1920px
+
+2560px
+
+Check:
+
+No overflow.
+
+No horizontal scrolling.
+
+Proper grids.
+
+Correct image scaling.
+
+Readable typography.
+
+Correct navigation.
+
+Proper spacing.
+
+Working drawers.
+
+Working menus.
+
+Working cards.
+
+Working tables.
+
+Working forms.
+
+Perfect responsiveness.
+
+---
+
+# THEME TESTING
+
+Test both themes completely.
+
+Professional Blue
+
+Emerald Midnight
+
+Verify:
+
+Theme switching
+
+Color consistency
+
+Text readability
+
+Contrast
+
+Cards
+
+Buttons
+
+Icons
+
+Navbar
+
+Footer
+
+Forms
+
+Gradients
+
+Aurora effects
+
+Glass effects
+
+No flashing during switching.
+
+No unreadable text.
+
+No broken colors.
+
+---
+
+# NAVIGATION TEST
+
+Click every:
+
+Button
+
+Link
+
+Navigation Item
+
+Card
+
+Menu
+
+Dropdown
+
+Footer Link
+
+Sidebar Item
+
+Profile Item
+
+CTA
+
+Nothing should be broken.
+
+If backend functionality is unavailable:
+
+Open a premium Coming Soon page.
+
+Never allow dead links.
+
+---
+
+# FORM TESTING
+
+Inspect every form.
+
+Verify:
+
+Labels
+
+Validation
+
+Focus
+
+Keyboard navigation
+
+Spacing
+
+Error states
+
+Success states
+
+Loading states
+
+Accessibility
+
+Mobile layout
+
+---
+
+# COMING SOON TEST
+
+Every unfinished feature must:
+
+Open correctly.
+
+Have premium UI.
+
+Contain:
+
+Illustration
+
+Description
+
+Badge
+
+Timeline placeholder
+
+Email field (UI)
+
+Related Features
+
+Return Navigation
+
+Never feel unfinished.
+
+---
+
+# ANIMATION AUDIT
+
+Review every animation.
+
+Check:
+
+Smoothness
+
+Timing
+
+Duration
+
+Consistency
+
+Performance
+
+Entrance
+
+Exit
+
+Hover
+
+Scroll
+
+Page Transition
+
+Micro-interactions
+
+Loading
+
+Aurora movement
+
+Cursor interactions
+
+Remove unnecessary animations.
+
+Optimize heavy animations.
+
+---
+
+# CURSOR EXPERIENCE
+
+Desktop only.
+
+Verify:
+
+Follower
+
+Glow
+
+Magnetic Buttons
+
+Hover Scaling
+
+Ripple
+
+Card Tilt
+
+Disable automatically on touch devices.
+
+---
+
+# PERFORMANCE AUDIT
+
+Review:
+
+Bundle size
+
+Lazy loading
+
+Image optimization
+
+Unused assets
+
+Unused imports
+
+Unused components
+
+Memory leaks
+
+Re-render issues
+
+Animation performance
+
+Lighthouse optimization
+
+Layout shifts
+
+Keep everything lightweight.
+
+---
+
+# ACCESSIBILITY AUDIT
+
+Verify:
+
+Semantic HTML
+
+ARIA Labels
+
+Keyboard Navigation
+
+Tab Order
+
+Screen Reader Support
+
+Contrast
+
+Focus Ring
+
+Reduced Motion
+
+WCAG AA
+
+Accessible Forms
+
+Accessible Navigation
+
+---
+
+# TYPOGRAPHY AUDIT
+
+Review:
+
+Heading hierarchy
+
+Body text
+
+Line height
+
+Letter spacing
+
+Paragraph width
+
+Contrast
+
+Consistency
+
+Font weights
+
+Readability
+
+---
+
+# COMPONENT REVIEW
+
+Inspect every reusable component.
+
+Verify:
+
+Reusability
+
+Consistency
+
+Maintainability
+
+Variants
+
+States
+
+Responsiveness
+
+Accessibility
+
+Documentation readiness
+
+Refactor duplicated code.
+
+---
+
+# SEO AUDIT
+
+Verify:
+
+Title
+
+Meta Description
+
+Canonical URL placeholders
+
+Open Graph placeholders
+
+Twitter Cards
+
+Heading hierarchy
+
+Semantic HTML
+
+Structured data readiness
+
+---
+
+# ERROR TESTING
+
+Attempt to break the UI.
+
+Test:
+
+Long text
+
+Empty data
+
+Large cards
+
+Missing images
+
+Broken images
+
+Missing icons
+
+Slow loading
+
+Different browsers
+
+Zoom levels
+
+Reduced motion
+
+Dark mode
+
+Light mode
+
+Nothing should visually break.
+
+---
+
+# CROSS-BROWSER TESTING
+
+Review compatibility for:
+
+Chrome
+
+Edge
+
+Firefox
+
+Safari
+
+Mobile browsers
+
+Ensure consistent appearance and behavior.
+
+---
+
+# CODE QUALITY REVIEW
+
+Inspect:
+
+Folder structure
+
+Naming conventions
+
+Component organization
+
+Type safety
+
+Unused code
+
+Duplicate logic
+
+Imports
+
+Performance
+
+Scalability
+
+Maintainability
+
+Refactor where needed.
+
+---
+
+# FINAL QUALITY CHECKLIST
+
+Before considering the project complete, verify:
+
+✔ Every page is visually beautiful.
+
+✔ Every component is reusable.
+
+✔ Every layout is responsive.
+
+✔ Every interaction feels premium.
+
+✔ Every button works.
+
+✔ Every link works.
+
+✔ Every Coming Soon page works.
+
+✔ Every animation is smooth.
+
+✔ Aurora effects are consistent.
+
+✔ Themes are flawless.
+
+✔ No layout shifts.
+
+✔ No console errors.
+
+✔ No accessibility issues.
+
+✔ No performance bottlenecks.
+
+✔ No broken responsiveness.
+
+✔ No visual inconsistencies.
+
+✔ No duplicated UI.
+
+✔ No unfinished screens.
+
+✔ No placeholder text that should be replaced.
+
+✔ Production-level code quality.
+
+✔ Investor-ready visual quality.
+
+✔ Client-ready presentation quality.
+
+---
+
+# CONTINUOUS QA LOOP
+
+After completing one audit:
+
+1. Scan the entire project again.
+2. Compare every page against the design system.
+3. Search for inconsistencies.
+4. Fix them.
+5. Re-test.
+6. Re-audit.
+7. Optimize.
+8. Repeat.
+
+Continue this loop until repeated full-project audits reveal no significant UI, UX, responsiveness, accessibility, navigation, animation, performance, or code-quality issues.
+
+Do not stop because the project "looks finished." Stop only when the frontend is cohesive, stable, maintainable, and ready for production deployment.

@@ -1,0 +1,271 @@
+# ADDITIONAL REQUIREMENTS — Navigation, Coming Soon Experience & Aurora Motion System
+
+Add the following requirements to the master prompt.
+
+---
+
+# FULL WEBSITE NAVIGATION
+
+Every page, button, menu item, card, CTA, and feature must be fully accessible from the UI.
+
+No dead links.
+
+No disabled navigation.
+
+Users should be able to click every feature and reach a professionally designed page.
+
+If a backend feature is not implemented, open a dedicated page or modal instead of showing an error or doing nothing.
+
+---
+
+# COMING SOON EXPERIENCE
+
+The project is currently frontend-only.
+
+Every backend-dependent feature must have a premium **Coming Soon** experience.
+
+Examples include:
+
+* Apply Now
+* Register
+* Login
+* Dashboard
+* User Profile
+* Employer Dashboard
+* Admin Panel
+* Course Enrollment
+* Resume Builder
+* Resume Upload
+* Mentor Booking
+* Payment
+* Saved Jobs
+* Wishlist
+* Notifications
+* Chat
+* Certificates
+* Application Tracking
+* Interview Scheduling
+
+When a user clicks any of these features:
+
+Open a beautifully designed page or modal containing:
+
+* Large premium illustration
+* Feature title
+* Short professional description
+* "Coming Soon" badge
+* Status indicator
+* Estimated availability text placeholder
+* Email notification input (UI only)
+* Back to Home button
+* Browse Other Features button
+
+Never show:
+
+* Empty pages
+* Broken routes
+* 404 pages for unfinished features
+* Disabled buttons
+* Console errors
+
+Every unfinished feature must still feel intentional and premium.
+
+---
+
+# COMING SOON DESIGN
+
+The Coming Soon page must feel like a finished product.
+
+Include:
+
+* Hero illustration
+* Animated headline
+* Premium glass card
+* Progress indicator
+* Timeline placeholder
+* Frequently Asked Questions
+* Related features
+* Newsletter subscription UI
+* Smooth entrance animations
+
+The page should encourage users to continue exploring the platform.
+
+---
+
+# AURORA VISUAL SYSTEM
+
+Use a consistent Aurora design language throughout the website.
+
+Do NOT use random visual effects.
+
+Do NOT place glowing effects arbitrarily.
+
+Every effect must serve the design and reinforce the premium brand.
+
+Aurora elements may include:
+
+* Soft animated aurora gradients
+* Flowing light bands
+* Ambient background glow
+* Layered radial gradients
+* Gentle mesh gradients
+* Soft luminous edges
+* Premium spotlight effects
+* Elegant background lighting
+
+The Aurora effects must remain subtle, refined, and consistent.
+
+Never overwhelm the interface.
+
+---
+
+# HOVER EFFECTS
+
+Hover interactions must follow one unified motion language.
+
+Do NOT create different hover effects for every component.
+
+Examples:
+
+Cards
+
+* Slight elevation
+* Soft scaling (1.02–1.04)
+* Refined shadow increase
+* Smooth border highlight
+* Subtle aurora glow (dark theme only)
+
+Buttons
+
+* Gentle lift
+* Gradient shift
+* Soft shadow
+* Smooth ripple
+* Clean transition
+
+Links
+
+* Elegant underline animation
+* Color transition
+* No flashy effects
+
+Icons
+
+* Small rotation or scale
+* Soft color transition
+
+Images
+
+* Slight zoom
+* Soft overlay
+* Smooth transition
+
+Keep all hover animations elegant, restrained, and consistent.
+
+---
+
+# SCROLL EXPERIENCE
+
+Scrolling should feel fluid and cinematic.
+
+Implement:
+
+* Aurora background movement
+* Layered parallax
+* Smooth section reveal
+* Fade + slide transitions
+* Blur-to-clear appearance
+* Staggered content animations
+* Animated counters
+* Progress indicator
+* Sticky navigation
+* Active section highlighting
+* Back-to-top button
+
+Do NOT use excessive bouncing, spinning, or distracting animations.
+
+Motion should guide attention rather than distract.
+
+---
+
+# PAGE TRANSITIONS
+
+Every page transition should include:
+
+* Smooth fade
+* Slight upward movement
+* Soft blur removal
+* Background continuity
+* Preserved scroll behavior
+
+Avoid abrupt page changes.
+
+---
+
+# MOTION CONSISTENCY
+
+All animations must use a unified timing system.
+
+Maintain consistent:
+
+* Duration
+* Easing
+* Delay
+* Scale
+* Opacity transitions
+
+The interface should feel designed as one cohesive system.
+
+---
+
+# DESIGN REVIEW LOOP
+
+After completing every page:
+
+Review:
+
+* Visual hierarchy
+* White space
+* Color balance
+* Typography
+* Component consistency
+* Animation quality
+* Aurora consistency
+* Hover consistency
+* Accessibility
+* Responsiveness
+* Performance
+
+If anything looks average, redesign it before moving on.
+
+Never accept "good enough."
+
+---
+
+# FINAL QUALITY STANDARD
+
+Before considering the frontend complete, verify:
+
+✔ Every page is fully navigable.
+
+✔ Every button leads somewhere meaningful.
+
+✔ Every unfinished feature has a premium Coming Soon experience.
+
+✔ No broken routes.
+
+✔ No disabled UI.
+
+✔ No inconsistent hover animations.
+
+✔ Aurora effects are subtle and consistent.
+
+✔ Motion feels premium.
+
+✔ Both themes are visually balanced.
+
+✔ Blue theme feels clean, bright, and trustworthy.
+
+✔ Emerald Midnight theme feels luxurious, immersive, and elegant.
+
+✔ The entire website feels like a cohesive, investor-ready SaaS product rather than a collection of separate pages.
