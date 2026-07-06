@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -129,7 +129,7 @@ const scholarships = [
   {
     id: 8,
     name: 'Need-Based College Access Grant',
-    provider: 'MB Career Connect Foundation',
+    provider: 'MB Career Phagwara Foundation',
     category: 'need',
     categoryLabel: 'Need-Based',
     amount: '₹25,000 one-time',

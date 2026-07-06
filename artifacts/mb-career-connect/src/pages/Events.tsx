@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -55,7 +55,7 @@ const events = [
   {
     id: 1,
     title: 'Full Stack Web Development Bootcamp',
-    organizer: 'MB Career Connect × GeeksforGeeks',
+    organizer: 'MB Career Phagwara × GeeksforGeeks',
     type: 'workshop',
     date: 'Jul 20, 2025',
     time: '10:00 AM – 4:00 PM',
@@ -85,7 +85,7 @@ const events = [
   {
     id: 3,
     title: 'AI in the Workplace: What Every Professional Must Know',
-    organizer: 'MB Career Connect',
+    organizer: 'MB Career Phagwara',
     type: 'webinar',
     date: 'Jul 18, 2025',
     time: '7:00 PM – 8:30 PM',
@@ -100,7 +100,7 @@ const events = [
   {
     id: 4,
     title: 'National Career Fair 2025',
-    organizer: 'MB Career Connect & NASSCOM',
+    organizer: 'MB Career Phagwara & NASSCOM',
     type: 'career-fair',
     date: 'Aug 3–4, 2025',
     time: '10:00 AM – 6:00 PM',

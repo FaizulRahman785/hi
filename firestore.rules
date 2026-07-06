@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Secure profiles collection
+    match /profiles/{profileId} {
+      // Allow read/write if the authenticated user's UID matches the profile document ID (UID lookup)
+      // OR if the authenticated user's email matches the profile document ID (email fallback)
+      allow read, write: if request.auth != null && (
+        request.auth.uid == profileId || 
+        request.auth.token.email == profileId
+      );
+    }
+  }
+}

@@ -1,4 +1,4 @@
-# MB Career Connect
+# MB Career Phagwara
 
 A premium career growth platform frontend — jobs, internships, courses, mentorship, and hiring partners for students and professionals in India.
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -130,7 +130,7 @@ const articles = [
     category: 'startup',
     categoryLabel: 'Startup',
     author: 'MB Editorial Team',
-    authorRole: 'MB Career Connect',
+    authorRole: 'MB Career Phagwara',
     readTime: '14 min read',
     date: 'May 28, 2025',
     featured: false,

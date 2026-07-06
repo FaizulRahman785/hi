@@ -1,10 +1,10 @@
-export const testimonials = [
+﻿export const testimonials = [
   {
     id: "t1",
     name: "Arjun Mehta",
     role: "Software Developer",
     company: "TechCorp",
-    quote: "MB Career Connect helped me land my first job. The platform is easy to use, and the verified listings saved me a lot of time.",
+    quote: "MB Career Phagwara helped me land my first job. The platform is easy to use, and the verified listings saved me a lot of time.",
     image: "AM"
   },
   {
@@ -28,7 +28,7 @@ export const testimonials = [
     name: "Priya Singh",
     role: "HR Executive",
     company: "PeopleFirst",
-    quote: "As a fresh graduate, I was confused about my career path. The career guidance sessions gave me clarity and confidence. Thank you, MB Career Connect!",
+    quote: "As a fresh graduate, I was confused about my career path. The career guidance sessions gave me clarity and confidence. Thank you, MB Career Phagwara!",
     image: "PS"
   }
 ];

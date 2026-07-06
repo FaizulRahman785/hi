@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -217,7 +217,7 @@ export function StudentResources() {
 
         {/* Explore More */}
         <div className="mt-16">
-          <h3 className="text-xl font-bold text-foreground mb-6">Explore More on MB Career Connect</h3>
+          <h3 className="text-xl font-bold text-foreground mb-6">Explore More on MB Career Phagwara</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { label: 'Browse Jobs', href: '/jobs', icon: Target },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,9 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
+import { getProfileCompletion, loadProfileFromApi, loadProfileFromStorage, saveProfile, type UserProfile } from '@/lib/profile';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Overview', path: '/dashboard', id: 'overview' },
@@ -30,7 +33,7 @@ const navItems = [
   { icon: SettingsIcon, label: 'Settings', path: '/settings', id: 'settings' },
 ];
 
-function DashboardLayout({ children, active }: { children: React.ReactNode; active: string }) {
+function DashboardLayout({ children, active, profile, user, onLogout }: { children: React.ReactNode; active: string; profile: UserProfile | null; user: { email?: string | null; displayName?: string | null } | null; onLogout: () => void }) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -48,11 +51,11 @@ function DashboardLayout({ children, active }: { children: React.ReactNode; acti
               <div className="bg-card border border-border rounded-2xl p-4 sticky top-28 shadow-sm">
                 <div className="flex items-center gap-3 p-2 mb-5 border-b border-border pb-5">
                   <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground flex items-center justify-center font-bold text-lg shrink-0">
-                    JD
+                    {profile?.fullName?.slice(0, 2).toUpperCase() ?? user?.email?.slice(0, 2).toUpperCase() ?? 'MB'}
                   </div>
                   <div className="min-w-0">
-                    <h3 className="font-bold text-foreground text-sm truncate">John Doe</h3>
-                    <p className="text-xs text-muted-foreground truncate">Software Developer · B.Tech CSE</p>
+                    <h3 className="font-bold text-foreground text-sm truncate">{profile?.fullName || user?.displayName || user?.email || 'New Member'}</h3>
+                    <p className="text-xs text-muted-foreground truncate">{profile?.degree || 'Career seeker'}{profile?.college ? ` · ${profile.college}` : ''}</p>
                   </div>
                 </div>
 
@@ -78,10 +81,10 @@ function DashboardLayout({ children, active }: { children: React.ReactNode; acti
                     </Link>
                   ))}
                   <div className="pt-3 mt-3 border-t border-border">
-                    <span className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors cursor-pointer">
+                    <button type="button" onClick={onLogout} className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors cursor-pointer">
                       <LogOut className="w-4 h-4" />
                       Logout
-                    </span>
+                    </button>
                   </div>
                 </nav>
               </div>
@@ -121,16 +124,51 @@ const upcomingEvents = [
 ];
 
 export function Dashboard() {
+  const { user, logout } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      let currentProfile = loadProfileFromStorage();
+      if ((!currentProfile || !currentProfile.onboardingCompleted) && user?.email) {
+        const remote = await loadProfileFromApi(user.email);
+        if (remote) {
+          currentProfile = remote;
+        }
+      }
+
+      if (currentProfile) {
+        setProfile(currentProfile);
+        if (!currentProfile.onboardingCompleted) {
+          setLocation('/onboarding');
+        }
+      } else {
+        setLocation('/onboarding');
+      }
+    };
+
+    if (user) {
+      void checkOnboarding();
+    }
+  }, [user, setLocation]);
+
+  const completion = useMemo(() => {
+    if (!profile) return 0;
+    const values = [profile.fullName, profile.phone, profile.city, profile.college, profile.degree, profile.skills.length > 0 ? 'skills' : '', profile.bio];
+    return Math.min(100, Math.round((values.filter(Boolean).length / 7) * 100));
+  }, [profile]);
+
   return (
-    <DashboardLayout active="overview">
+    <DashboardLayout active="overview" profile={profile} user={user} onLogout={() => logout()}>
       <div className="space-y-6">
         {/* Welcome Header */}
         <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-2xl p-6">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm text-muted-foreground mb-1">Welcome back 👋</p>
-              <h1 className="text-2xl font-extrabold text-foreground">John Doe</h1>
-              <p className="text-sm text-muted-foreground mt-1">B.Tech CSE · Final Year · IIT Delhi</p>
+              <h1 className="text-2xl font-extrabold text-foreground">{profile?.fullName || user?.displayName || 'Welcome'}</h1>
+              <p className="text-sm text-muted-foreground mt-1">{profile?.degree || 'Career seeker'}{profile?.college ? ` · ${profile.college}` : ''}</p>
             </div>
             <Button size="sm" variant="outline" className="border-border gap-2 text-xs">
               <Edit3 className="w-3.5 h-3.5" /> Edit Profile
@@ -215,9 +253,9 @@ export function Dashboard() {
               <h2 className="font-bold text-foreground mb-1">Profile Strength</h2>
               <p className="text-xs text-muted-foreground mb-3">Complete your profile to get more views</p>
               <div className="w-full bg-muted rounded-full h-2 mb-3">
-                <div className="bg-primary h-2 rounded-full" style={{ width: '72%' }} />
+                <div className="bg-primary h-2 rounded-full" style={{ width: `${completion}%` }} />
               </div>
-              <p className="text-sm font-semibold text-foreground mb-3">72% Complete</p>
+              <p className="text-sm font-semibold text-foreground mb-3">{completion}% Complete</p>
               <div className="space-y-2">
                 {[
                   { label: 'Add profile photo', done: false },
@@ -263,26 +301,100 @@ export function Dashboard() {
 
 // ─── PROFILE ───────────────────────────────────────────────────────────────────
 export function Profile() {
+  const { user, logout } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const loadData = async () => {
+      const stored = loadProfileFromStorage();
+      setProfile(stored);
+
+      if (stored?.email) {
+        const remote = await loadProfileFromApi(stored.email);
+        if (remote) {
+          setProfile(remote);
+        }
+      }
+    };
+
+    void loadData();
+  }, []);
+
+  const updateField = <K extends keyof UserProfile>(field: K, value: UserProfile[K]) => {
+    setProfile((prev) => (prev ? { ...prev, [field]: value } : prev));
+  };
+
+  const handleSave = async () => {
+    if (!profile) return;
+
+    setIsSaving(true);
+    setMessage('');
+
+    try {
+      const finalizedProfile = {
+        ...profile,
+        profileCompletion: getProfileCompletion(profile),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const savedProfile = await saveProfile(finalizedProfile);
+      setProfile(savedProfile);
+      setEditing(false);
+      setMessage('Profile saved successfully.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
-    <DashboardLayout active="profile">
+    <DashboardLayout active="profile" profile={profile} user={user} onLogout={() => logout()}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-extrabold text-foreground">My Profile</h1>
-          <Button size="sm" className="btn-glow gap-2 text-xs">
-            <Edit3 className="w-3.5 h-3.5" /> Edit Profile
-          </Button>
+          <div>
+            <h1 className="text-2xl font-extrabold text-foreground">My Profile</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Keep your profile current for recruiters and mentors.</p>
+          </div>
+          <div className="flex gap-2">
+            {editing ? (
+              <Button size="sm" variant="outline" onClick={() => setEditing(false)} className="border-border text-xs">Cancel</Button>
+            ) : null}
+            <Button size="sm" className="btn-glow gap-2 text-xs" onClick={() => (editing ? handleSave() : setEditing(true))} disabled={isSaving}>
+              <Edit3 className="w-3.5 h-3.5" /> {editing ? (isSaving ? 'Saving...' : 'Save Profile') : 'Edit Profile'}
+            </Button>
+          </div>
         </div>
 
-        {/* Profile Card */}
+        {message ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</div> : null}
+
         <div className="bg-card border border-border rounded-2xl overflow-hidden">
           <div className="h-24 bg-gradient-to-r from-primary/30 via-primary/20 to-transparent" />
           <div className="px-6 pb-6">
             <div className="-mt-10 flex items-end justify-between mb-5">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground flex items-center justify-center font-extrabold text-2xl border-4 border-card shadow-lg">
-                JD
+              <div className="w-20 h-20 rounded-2xl overflow-hidden border-4 border-card shadow-lg shrink-0">
+                {profile?.profilePhotoUrl ? (
+                  <img src={profile.profilePhotoUrl} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground flex items-center justify-center font-extrabold text-2xl">
+                    {profile?.fullName?.slice(0, 2).toUpperCase() ?? 'MB'}
+                  </div>
+                )}
               </div>
               <div className="flex gap-2 pb-1">
-                <Button size="sm" variant="outline" className="border-border h-8 text-xs gap-1.5">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="border-border h-8 text-xs gap-1.5"
+                  onClick={() => {
+                    if (profile?.resumeUrl) {
+                      window.open(profile.resumeUrl, '_blank');
+                    } else {
+                      alert('No resume uploaded yet.');
+                    }
+                  }}
+                >
                   <Download className="w-3.5 h-3.5" /> Resume
                 </Button>
                 <Button size="sm" variant="outline" className="border-border h-8 text-xs gap-1.5">
@@ -291,131 +403,168 @@ export function Profile() {
               </div>
             </div>
             <div className="mb-4">
-              <h2 className="text-xl font-extrabold text-foreground">John Doe</h2>
-              <p className="text-sm text-muted-foreground">Software Developer · Final Year B.Tech CSE</p>
-              <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                <Building2 className="w-3.5 h-3.5 shrink-0" /> IIT Delhi · New Delhi, India
-              </p>
+              {editing ? (
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-medium">Full name</label>
+                    <input value={profile?.fullName ?? ''} onChange={(e) => updateField('fullName', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-medium">Profile Photo</label>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        try {
+                          const url = await uploadToCloudinary(file, 'profile-photos');
+                          updateField('profilePhotoUrl', url);
+                        } catch (err: any) {
+                          alert(`Upload failed: ${err.message}`);
+                        }
+                      }} 
+                      className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Email</label>
+                    <input value={profile?.email ?? ''} onChange={(e) => updateField('email', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" disabled />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Phone</label>
+                    <input value={profile?.phone ?? ''} onChange={(e) => updateField('phone', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">College</label>
+                    <input value={profile?.college ?? ''} onChange={(e) => updateField('college', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Degree</label>
+                    <input value={profile?.degree ?? ''} onChange={(e) => updateField('degree', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-medium">Bio</label>
+                    <textarea value={profile?.bio ?? ''} onChange={(e) => updateField('bio', e.target.value)} className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-xl font-extrabold text-foreground">{profile?.fullName || user?.displayName || 'Your name'}</h2>
+                  <p className="text-sm text-muted-foreground">{profile?.degree || 'Career seeker'}{profile?.college ? ` · ${profile.college}` : ''}</p>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                    <Building2 className="w-3.5 h-3.5 shrink-0" /> {profile?.city || 'Your city'}{profile?.state ? `, ${profile.state}` : ''}
+                  </p>
+                </>
+              )}
             </div>
             <div className="flex flex-wrap gap-3 text-xs text-muted-foreground mb-4">
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Mail className="w-3.5 h-3.5" /> john.doe@iitd.ac.in</a>
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Phone className="w-3.5 h-3.5" /> +91 98765 43210</a>
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Linkedin className="w-3.5 h-3.5" /> linkedin.com/in/johndoe</a>
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Github className="w-3.5 h-3.5" /> github.com/johndoe</a>
+              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Mail className="w-3.5 h-3.5" /> {profile?.email || user?.email || 'Add your email'}</a>
+              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Phone className="w-3.5 h-3.5" /> {profile?.phone || 'Add phone'}</a>
+              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Linkedin className="w-3.5 h-3.5" /> {profile?.linkedinUrl || 'Add LinkedIn'}</a>
+              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Github className="w-3.5 h-3.5" /> {profile?.githubUrl || 'Add GitHub'}</a>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-              Passionate software developer with experience building full-stack web applications. Currently in final year of B.Tech CSE at IIT Delhi, actively seeking SDE-1 roles in product companies.
+              {profile?.bio || 'Tell recruiters about your goals, strengths, and the kind of opportunities you want.'}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
-            {/* Skills */}
             <div className="bg-card border border-border rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-bold text-foreground">Skills</h3>
-                <Button size="sm" variant="ghost" className="h-8 text-xs gap-1 text-primary"><Plus className="w-3.5 h-3.5" /> Add</Button>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {['React', 'Node.js', 'TypeScript', 'Python', 'PostgreSQL', 'Docker', 'AWS', 'GraphQL', 'Next.js', 'Tailwind CSS'].map(skill => (
-                  <span key={skill} className="px-3 py-1.5 rounded-lg text-sm bg-primary/10 text-primary border border-primary/20 font-medium">{skill}</span>
-                ))}
-              </div>
+              {editing ? (
+                <textarea value={(profile?.skills ?? []).join(', ')} onChange={(e) => updateField('skills', e.target.value.split(',').map((item) => item.trim()).filter(Boolean))} className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" placeholder="React, Node.js, TypeScript" />
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {(profile?.skills?.length ? profile.skills : ['Add your strongest skills']).map((skill) => (
+                    <span key={skill} className="px-3 py-1.5 rounded-lg text-sm bg-primary/10 text-primary border border-primary/20 font-medium">{skill}</span>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Experience */}
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-foreground">Experience</h3>
-                <Button size="sm" variant="ghost" className="h-8 text-xs gap-1 text-primary"><Plus className="w-3.5 h-3.5" /> Add</Button>
-              </div>
-              <div className="space-y-5">
-                {[
-                  {
-                    role: 'Software Engineering Intern',
-                    company: 'Razorpay',
-                    period: 'May 2025 – Jul 2025',
-                    desc: 'Built React components for the merchant dashboard, reduced load time by 40% through code splitting and lazy loading.',
-                  },
-                  {
-                    role: 'Full Stack Developer Intern',
-                    company: 'StartupXYZ',
-                    period: 'Dec 2024 – Feb 2025',
-                    desc: 'Developed a B2B SaaS invoicing module using Node.js + PostgreSQL, handling 10K+ invoices per month.',
-                  },
-                ].map((exp, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary font-bold text-sm shrink-0">
-                      {exp.company[0]}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground text-sm">{exp.role}</h4>
-                      <p className="text-xs text-muted-foreground">{exp.company} · {exp.period}</p>
-                      <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{exp.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Education */}
             <div className="bg-card border border-border rounded-2xl p-6">
               <h3 className="font-bold text-foreground mb-4">Education</h3>
-              <div className="space-y-4">
-                {[
-                  { degree: 'B.Tech — Computer Science & Engineering', institution: 'IIT Delhi', period: '2022 – 2026', cgpa: '8.7 / 10' },
-                  { degree: 'Class XII (Science)', institution: 'DPS RK Puram, New Delhi', period: '2020 – 2022', cgpa: '94.8%' },
-                ].map((edu, i) => (
-                  <div key={i} className="flex gap-4">
+              {editing ? (
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">Degree</label>
+                    <input value={profile?.degree ?? ''} onChange={(e) => updateField('degree', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">College</label>
+                    <input value={profile?.college ?? ''} onChange={(e) => updateField('college', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex gap-4">
                     <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center shrink-0">
                       <GraduationCap className="w-5 h-5 text-amber-500" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground text-sm">{edu.degree}</h4>
-                      <p className="text-xs text-muted-foreground">{edu.institution} · {edu.period}</p>
-                      <p className="text-xs text-primary font-semibold mt-1">CGPA / Score: {edu.cgpa}</p>
+                      <h4 className="font-semibold text-foreground text-sm">{profile?.degree || 'Degree not set'}</h4>
+                      <p className="text-xs text-muted-foreground">{profile?.college || 'College not set'}</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-5">
-            {/* Resume */}
             <div className="bg-card border border-border rounded-2xl p-6">
               <h3 className="font-bold text-foreground mb-3">Resume</h3>
               <div className="border-2 border-dashed border-border rounded-xl p-6 text-center mb-3">
                 <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2 opacity-50" />
-                <p className="text-xs text-muted-foreground">JohnDoe_Resume_2025.pdf</p>
-                <p className="text-xs text-muted-foreground">Uploaded Jun 15, 2025</p>
+                <p className="text-xs text-muted-foreground truncate">{profile?.resumeUrl ? profile.resumeUrl.split('/').pop() : 'Upload your resume'}</p>
               </div>
+              <input
+                type="file"
+                id="resume-upload-input"
+                accept=".pdf,.doc,.docx"
+                className="hidden"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  try {
+                    const url = await uploadToCloudinary(file, 'resumes');
+                    if (profile) {
+                      const updated = { ...profile, resumeUrl: url };
+                      setProfile(updated);
+                      await saveProfile(updated);
+                    }
+                  } catch (err: any) {
+                    alert(`Upload failed: ${err.message}`);
+                  }
+                }}
+              />
               <div className="grid grid-cols-2 gap-2">
-                <Button size="sm" variant="outline" className="border-border text-xs h-9 gap-1.5"><Download className="w-3.5 h-3.5" />Download</Button>
-                <Button size="sm" className="btn-glow text-xs h-9 gap-1.5"><Upload className="w-3.5 h-3.5" />Replace</Button>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <h3 className="font-bold text-foreground mb-4">Profile Stats</h3>
-              <div className="space-y-3">
-                {[
-                  { label: 'Profile Views', value: '145', icon: Eye, delta: '+22 this week', positive: true },
-                  { label: 'Search Appearances', value: '38', icon: Search, delta: '+7 this week', positive: true },
-                  { label: 'Shortlisted', value: '4', icon: Star, delta: 'This month', positive: true },
-                ].map(stat => (
-                  <div key={stat.label} className="flex items-center gap-3">
-                    <stat.icon className="w-4 h-4 text-primary shrink-0" />
-                    <div className="flex-1">
-                      <p className="text-sm font-semibold text-foreground">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground">{stat.label}</p>
-                    </div>
-                    <span className="text-xs text-emerald-500 font-medium">{stat.delta}</span>
-                  </div>
-                ))}
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="border-border text-xs h-9 gap-1.5"
+                  onClick={() => {
+                    if (profile?.resumeUrl) {
+                      window.open(profile.resumeUrl, '_blank');
+                    } else {
+                      alert('No resume uploaded yet.');
+                    }
+                  }}
+                >
+                  <Download className="w-3.5 h-3.5" />Download
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="btn-glow text-xs h-9 gap-1.5"
+                  onClick={() => document.getElementById('resume-upload-input')?.click()}
+                >
+                  <Upload className="w-3.5 h-3.5" />Replace
+                </Button>
               </div>
             </div>
           </div>
@@ -443,7 +592,7 @@ export function MyApplications() {
   const filtered = filter === 'All' ? applications : applications.filter(a => a.status === filter);
 
   return (
-    <DashboardLayout active="applications">
+    <DashboardLayout active="applications" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -531,7 +680,7 @@ const savedJobs = [
 
 export function SavedJobs() {
   return (
-    <DashboardLayout active="saved-jobs">
+    <DashboardLayout active="saved-jobs" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -580,7 +729,7 @@ export function SavedJobs() {
 
 // ─── SAVED COURSES ─────────────────────────────────────────────────────────────
 const savedCourses = [
-  { id: 1, title: 'Full Stack Web Development Bootcamp', provider: 'MB Career Connect', duration: '6 months', progress: 35, enrolled: true, logo: 'F' },
+  { id: 1, title: 'Full Stack Web Development Bootcamp', provider: 'MB Career Phagwara', duration: '6 months', progress: 35, enrolled: true, logo: 'F' },
   { id: 2, title: 'System Design Masterclass', provider: 'Design Gurus', duration: '8 weeks', progress: 0, enrolled: false, logo: 'S' },
   { id: 3, title: 'AWS Cloud Practitioner', provider: 'Amazon', duration: '3 months', progress: 72, enrolled: true, logo: 'A' },
   { id: 4, title: 'Machine Learning Fundamentals', provider: 'Coursera (Stanford)', duration: '4 months', progress: 0, enrolled: false, logo: 'M' },
@@ -588,7 +737,7 @@ const savedCourses = [
 
 export function SavedCourses() {
   return (
-    <DashboardLayout active="saved-courses">
+    <DashboardLayout active="saved-courses" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -658,7 +807,7 @@ const bookmarks = [
 
 export function Bookmarks() {
   return (
-    <DashboardLayout active="bookmarks">
+    <DashboardLayout active="bookmarks" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <h1 className="text-2xl font-extrabold text-foreground">Bookmarks</h1>
 
@@ -689,13 +838,13 @@ export function Bookmarks() {
 // ─── CERTIFICATES ─────────────────────────────────────────────────────────────
 const certificates = [
   { id: 1, title: 'AWS Cloud Practitioner', issuer: 'Amazon Web Services', date: 'May 2025', id_no: 'AWS-CLF-C02-2025-JD', in_progress: false },
-  { id: 2, title: 'Full Stack Web Development', issuer: 'MB Career Connect', date: 'Mar 2025', id_no: 'MB-FSWD-2025-0842', in_progress: false },
+  { id: 2, title: 'Full Stack Web Development', issuer: 'MB Career Phagwara', date: 'Mar 2025', id_no: 'MB-FSWD-2025-0842', in_progress: false },
   { id: 3, title: 'System Design Masterclass', issuer: 'Design Gurus', date: 'In Progress', id_no: '—', in_progress: true },
 ];
 
 export function Certificates() {
   return (
-    <DashboardLayout active="certificates">
+    <DashboardLayout active="certificates" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <h1 className="text-2xl font-extrabold text-foreground">My Certificates</h1>
 
@@ -748,14 +897,14 @@ const conversations = [
   { id: 1, name: 'Priya Nair', role: 'Ex-Google SWE · Mentor', lastMsg: "Sure, let's schedule a 1:1 session on Friday!", time: '2h ago', unread: 2, online: true },
   { id: 2, name: 'Razorpay HR', role: 'Recruiter at Razorpay', lastMsg: "We'd like to schedule a technical round for you.", time: '5h ago', unread: 1, online: false },
   { id: 3, name: 'Rohan Mehta', role: 'Study Partner — IIT Bombay', lastMsg: 'Did you solve the DP problem from yesterday?', time: '1d ago', unread: 0, online: true },
-  { id: 4, name: 'MB Career Connect', role: 'Platform Updates', lastMsg: 'Your profile was viewed by 3 companies this week!', time: '2d ago', unread: 0, online: false },
+  { id: 4, name: 'MB Career Phagwara', role: 'Platform Updates', lastMsg: 'Your profile was viewed by 3 companies this week!', time: '2d ago', unread: 0, online: false },
 ];
 
 export function Messages() {
   const [active, setActive] = useState<number | null>(1);
 
   return (
-    <DashboardLayout active="messages">
+    <DashboardLayout active="messages" profile={null} user={null} onLogout={() => {}}>
       <div className="h-[600px] flex border border-border rounded-2xl overflow-hidden bg-card">
         {/* Conversation List */}
         <div className="w-72 shrink-0 border-r border-border flex flex-col">
@@ -823,7 +972,7 @@ export function Messages() {
                 <div className="flex gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-xs shrink-0">PN</div>
                   <div className="bg-muted rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                    <p className="text-sm text-foreground">Hi John! I saw your profile on MB Career Connect. Your projects look impressive 🙌</p>
+                    <p className="text-sm text-foreground">Hi John! I saw your profile on MB Career Phagwara. Your projects look impressive 🙌</p>
                     <p className="text-xs text-muted-foreground mt-1">10:32 AM</p>
                   </div>
                 </div>
@@ -875,7 +1024,7 @@ const notifs = [
 
 export function Notifications() {
   return (
-    <DashboardLayout active="notifications">
+    <DashboardLayout active="notifications" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -920,7 +1069,7 @@ const activities = [
 
 export function Activity() {
   return (
-    <DashboardLayout active="activity">
+    <DashboardLayout active="activity" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <h1 className="text-2xl font-extrabold text-foreground">Activity Feed</h1>
 
@@ -962,7 +1111,7 @@ export function Settings() {
   );
 
   return (
-    <DashboardLayout active="settings">
+    <DashboardLayout active="settings" profile={null} user={null} onLogout={() => {}}>
       <div className="space-y-6">
         <h1 className="text-2xl font-extrabold text-foreground">Settings</h1>
 

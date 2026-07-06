@@ -1,4 +1,4 @@
-import { Link } from 'wouter';
+﻿import { Link } from 'wouter';
 import { Briefcase, Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,7 @@ export function Footer() {
               <div className="bg-primary text-primary-foreground p-2 rounded-lg group-hover:scale-110 transition-transform">
                 <Briefcase className="w-6 h-6" />
               </div>
-              <span className="text-2xl font-bold tracking-tight">MB Career Connect</span>
+              <span className="text-2xl font-bold tracking-tight">MB Career Phagwara</span>
             </Link>
             <p className="text-muted-foreground mb-8 max-w-sm leading-relaxed text-sm">
               India's complete career ecosystem for students and professionals. Discover jobs, internships, courses, mentors, and build your future.
@@ -105,7 +105,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-sm text-muted-foreground font-medium flex flex-wrap gap-x-4 gap-y-2 items-center">
-            <span>© {new Date().getFullYear()} MB Career Connect. All rights reserved.</span>
+            <span>© {new Date().getFullYear()} MB Career Phagwara. All rights reserved.</span>
             <span className="hidden md:inline">|</span>
             <Link href="/privacy" className="hover:text-primary transition-colors">Privacy</Link>
             <span className="hidden md:inline">|</span>

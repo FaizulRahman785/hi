@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Shield, FileText } from 'lucide-react';
@@ -59,7 +59,7 @@ function LegalLayout({ title, icon: Icon, lastUpdated, children }: {
 export function Privacy() {
   return (
     <LegalLayout title="Privacy Policy" icon={Shield} lastUpdated="May 1, 2024">
-      <p>At MB Career Connect, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.</p>
+      <p>At MB Career Phagwara, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.</p>
 
       <h2>1. Information We Collect</h2>
       <p>We collect information that you provide directly to us when you:</p>
@@ -105,10 +105,10 @@ export function Privacy() {
 export function Terms() {
   return (
     <LegalLayout title="Terms of Service" icon={FileText} lastUpdated="May 1, 2024">
-      <p>Please read these Terms of Service carefully before using MB Career Connect. By accessing or using our platform, you agree to be bound by these terms.</p>
+      <p>Please read these Terms of Service carefully before using MB Career Phagwara. By accessing or using our platform, you agree to be bound by these terms.</p>
 
       <h2>1. Acceptance of Terms</h2>
-      <p>By accessing and using MB Career Connect, you accept and agree to be bound by these Terms of Service and our Privacy Policy.</p>
+      <p>By accessing and using MB Career Phagwara, you accept and agree to be bound by these Terms of Service and our Privacy Policy.</p>
 
       <h2>2. User Accounts</h2>
       <p>You are responsible for maintaining the confidentiality of your account and password. You agree to accept responsibility for all activities that occur under your account.</p>
@@ -126,10 +126,10 @@ export function Terms() {
       <p>Employers who post jobs on our platform agree that all listings are genuine, legally compliant opportunities. We reserve the right to remove any listing that violates our community standards.</p>
 
       <h2>5. Intellectual Property</h2>
-      <p>The MB Career Connect platform, its content, features, and functionality are owned by MB Career Connect and are protected by copyright, trademark, and other intellectual property laws.</p>
+      <p>The MB Career Phagwara platform, its content, features, and functionality are owned by MB Career Phagwara and are protected by copyright, trademark, and other intellectual property laws.</p>
 
       <h2>6. Limitation of Liability</h2>
-      <p>MB Career Connect shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of (or inability to use) our services.</p>
+      <p>MB Career Phagwara shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of (or inability to use) our services.</p>
 
       <h2>7. Changes to Terms</h2>
       <p>We reserve the right to modify these terms at any time. We will notify users of significant changes via email or a prominent notice on our platform.</p>

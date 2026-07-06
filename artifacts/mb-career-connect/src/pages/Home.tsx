@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+﻿import React, { useRef } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Link } from 'wouter';
@@ -463,7 +463,7 @@ export function Home() {
                 animate={whyReveal.isInView ? "visible" : "hidden"}
                 transition={{ duration: 0.6 }}
               >
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Why Choose <br/><span className="text-primary">MB Career Connect?</span></h2>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Why Choose <br/><span className="text-primary">MB Career Phagwara?</span></h2>
                 <p className="text-muted-foreground text-lg mb-10 leading-relaxed max-w-lg">
                   We don't just list jobs; we build careers. Our platform offers a holistic approach to professional development, ensuring you have the skills, connections, and opportunities to succeed.
                 </p>

@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm --filter @workspace/mb-career-connect run build",
+  "outputDirectory": "artifacts/mb-career-connect/dist/public",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

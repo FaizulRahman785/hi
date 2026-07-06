@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -11,7 +11,7 @@ export function FAQ() {
     {
       title: 'General',
       items: [
-        { q: 'What is MB Career Connect?', a: 'MB Career Connect is a comprehensive career platform that bridges the gap between job seekers and employers in India. We offer job listings, internships, skill development courses, and mentorship.' },
+        { q: 'What is MB Career Phagwara?', a: 'MB Career Phagwara is a comprehensive career platform that bridges the gap between job seekers and employers in India. We offer job listings, internships, skill development courses, and mentorship.' },
         { q: 'Is the platform free to use?', a: 'Yes, creating a profile and applying for jobs/internships is completely free. We only charge for optional premium skill development courses and advanced mentorship sessions.' },
         { q: 'How do I contact support?', a: 'You can reach us via the Contact Us page, email us at support@mbcareerconnect.com, or use our WhatsApp chat support during business hours.' },
       ],

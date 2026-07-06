@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+﻿import { motion, useReducedMotion } from 'framer-motion';
 import { Rocket, Clock, Mail, ArrowLeft, ArrowRight, CheckCircle2, Circle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -249,7 +249,7 @@ export function ComingSoon({
             <AccordionItem value="item-2">
               <AccordionTrigger className="text-left font-medium">What will this feature do?</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">
-                This feature is designed to enhance your experience on MB Career Connect, bringing new tools and capabilities to help you achieve your career goals faster.
+                This feature is designed to enhance your experience on MB Career Phagwara, bringing new tools and capabilities to help you achieve your career goals faster.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">

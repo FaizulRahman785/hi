@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -11,6 +12,7 @@ import { ScrollProgress, BackToTop } from '@/components/ScrollEffects';
 // Existing pages
 import { Home } from '@/pages/Home';
 import { About } from '@/pages/About';
+import { Onboarding } from '@/pages/Onboarding';
 import { Jobs } from '@/pages/Jobs';
 import { Internships } from '@/pages/Internships';
 import { Courses } from '@/pages/Courses';
@@ -43,6 +45,29 @@ import {
   ClipboardList, FileText, CheckSquare, PenTool, DollarSign,
   Calculator, MessageSquare, Map, Rocket
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { isFirebaseConfigured } from '@/firebase/config';
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (!loading && !user && isFirebaseConfigured) {
+      setLocation('/login');
+    }
+  }, [loading, user, setLocation]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>;
+  }
+
+  if (!user && isFirebaseConfigured) {
+    return null;
+  }
+
+  return <>{children}</>;
+}
 
 const queryClient = new QueryClient();
 
@@ -91,17 +116,91 @@ function AnimatedSwitch() {
           <Route path="/scholarships" component={Scholarships} />
 
           {/* Dashboard pages */}
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/notifications" component={Notifications} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/my-applications" component={MyApplications} />
-          <Route path="/saved-jobs" component={SavedJobs} />
-          <Route path="/saved-courses" component={SavedCourses} />
-          <Route path="/bookmarks" component={Bookmarks} />
-          <Route path="/certificates" component={Certificates} />
-          <Route path="/messages" component={Messages} />
-          <Route path="/activity" component={Activity} />
+          <Route path="/onboarding">
+            {() => (
+              <ProtectedRoute>
+                <Onboarding />
+              </ProtectedRoute>
+            )}
+          </Route>
+
+          <Route path="/dashboard">
+            {() => (
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/profile">
+            {() => (
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/notifications">
+            {() => (
+              <ProtectedRoute>
+                <Notifications />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/settings">
+            {() => (
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/my-applications">
+            {() => (
+              <ProtectedRoute>
+                <MyApplications />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/saved-jobs">
+            {() => (
+              <ProtectedRoute>
+                <SavedJobs />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/saved-courses">
+            {() => (
+              <ProtectedRoute>
+                <SavedCourses />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/bookmarks">
+            {() => (
+              <ProtectedRoute>
+                <Bookmarks />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/certificates">
+            {() => (
+              <ProtectedRoute>
+                <Certificates />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/messages">
+            {() => (
+              <ProtectedRoute>
+                <Messages />
+              </ProtectedRoute>
+            )}
+          </Route>
+          <Route path="/activity">
+            {() => (
+              <ProtectedRoute>
+                <Activity />
+              </ProtectedRoute>
+            )}
+          </Route>
 
           {/* Auth */}
           <Route path="/login" component={Login} />

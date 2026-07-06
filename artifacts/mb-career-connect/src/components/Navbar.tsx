@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
   Briefcase, Menu, X, ChevronDown, Sun, Moon, Sparkles,
@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface DropdownItem {
@@ -82,6 +83,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [location] = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -146,7 +148,7 @@ export function Navbar() {
               <Briefcase className="w-6 h-6 relative z-10" />
             </div>
             <span className={`text-xl font-bold tracking-tight ${scrolled || location !== '/' ? 'text-foreground' : 'text-foreground lg:text-white'} ${theme === 'emerald' ? 'group-hover:text-emerald-400' : ''}`}>
-              MB Career Connect
+              MB Career Phagwara
             </span>
           </Link>
 
@@ -243,17 +245,36 @@ export function Navbar() {
               </TooltipContent>
             </Tooltip>
 
-            <Link href="/login" data-cursor="pointer">
-              <Button variant={scrolled || location !== '/' ? 'outline' : 'secondary'}
-                className={`hover-elevate transition-all ${!scrolled && location === '/' ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'hover:border-primary/50'}`}>
-                Login
-              </Button>
-            </Link>
-            <Link href="/register" data-cursor="pointer">
-              <Button className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5 active:scale-95 border-0">
-                Get Started
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <Link href="/dashboard" data-cursor="pointer">
+                  <Button variant={scrolled || location !== '/' ? 'outline' : 'secondary'}
+                    className={`hover-elevate transition-all ${!scrolled && location === '/' ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'hover:border-primary/50'}`}>
+                    Dashboard
+                  </Button>
+                </Link>
+                <Button 
+                  onClick={() => logout()} 
+                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5 active:scale-95 border-0 cursor-pointer"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" data-cursor="pointer">
+                  <Button variant={scrolled || location !== '/' ? 'outline' : 'secondary'}
+                    className={`hover-elevate transition-all ${!scrolled && location === '/' ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'hover:border-primary/50'}`}>
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/register" data-cursor="pointer">
+                  <Button className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5 active:scale-95 border-0 cursor-pointer">
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile controls */}
@@ -307,12 +328,28 @@ export function Navbar() {
               ))}
 
               <div className="mt-auto pt-6 pb-20 flex flex-col gap-3 px-2">
-                <Link href="/login" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" className="w-full justify-center h-12 text-base rounded-xl">Login</Button>
-                </Link>
-                <Link href="/register" onClick={() => setIsOpen(false)}>
-                  <Button className="w-full justify-center h-12 text-base rounded-xl bg-gradient-to-r from-primary to-accent border-0">Get Started</Button>
-                </Link>
+                {user ? (
+                  <>
+                    <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full justify-center h-12 text-base rounded-xl">Dashboard</Button>
+                    </Link>
+                    <Button 
+                      onClick={() => { logout(); setIsOpen(false); }} 
+                      className="w-full justify-center h-12 text-base rounded-xl bg-gradient-to-r from-primary to-accent border-0 cursor-pointer"
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full justify-center h-12 text-base rounded-xl">Login</Button>
+                    </Link>
+                    <Link href="/register" onClick={() => setIsOpen(false)}>
+                      <Button className="w-full justify-center h-12 text-base rounded-xl bg-gradient-to-r from-primary to-accent border-0 cursor-pointer">Get Started</Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

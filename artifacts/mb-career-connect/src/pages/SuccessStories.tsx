@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -25,7 +25,7 @@ const stories = [
     college: 'IIT Kanpur · CSE · 2022',
     type: 'placement',
     headline: 'From 0 DSA problems to Meta in 8 months',
-    quote: 'I had no idea what a linked list was in my 3rd year. Then I dedicated every day to learning. MB Career Connect\'s resources and mock interview guides completely transformed my preparation.',
+    quote: 'I had no idea what a linked list was in my 3rd year. Then I dedicated every day to learning. MB Career Phagwara\'s resources and mock interview guides completely transformed my preparation.',
     package: '₹52 LPA',
     duration: '8 months prep',
     tips: ['Start DSA from scratch — don\'t rush', 'Do 3 mock interviews weekly', 'System design is as important as DSA'],
@@ -90,7 +90,7 @@ const stories = [
     college: 'IITD + IIM-A · MBA · 2019',
     type: 'alumni',
     headline: 'IIT to IIM to BCG — navigating the MBA journey',
-    quote: 'The MBA journey is more about who you become than what you learn. MB Career Connect\'s mentorship network connected me with 5 BCG consultants before my final round.',
+    quote: 'The MBA journey is more about who you become than what you learn. MB Career Phagwara\'s mentorship network connected me with 5 BCG consultants before my final round.',
     package: '₹42 LPA',
     duration: '5-year journey',
     tips: ['Network before you need it', 'Case prep starts 6 months early', 'Your story matters as much as your grades'],

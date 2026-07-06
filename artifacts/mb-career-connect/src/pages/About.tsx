@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Target, Heart, Award, Shield, Users, TrendingUp, CheckCircle2 } from 'lucide-react';
@@ -39,7 +39,7 @@ export function About() {
               Empowering Careers,<br />Changing Lives
             </h1>
             <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-3xl mx-auto">
-              MB Career Connect is a trusted career launchpad for students, fresh graduates, and professionals in India.
+              MB Career Phagwara is a trusted career launchpad for students, fresh graduates, and professionals in India.
               We bridge the gap between talent and opportunity.
             </p>
           </motion.div>
@@ -86,7 +86,7 @@ export function About() {
                 </p>
                 <p className="text-muted-foreground text-lg leading-relaxed">
                   We don't just act as a job board; we act as a career partner. From your first resume draft to
-                  negotiating your senior-level salary, MB Career Connect is built to support every phase of your
+                  negotiating your senior-level salary, MB Career Phagwara is built to support every phase of your
                   professional journey.
                 </p>
                 <div className="mt-8 space-y-3">
@@ -136,7 +136,7 @@ export function About() {
               <h2 className="text-3xl font-bold text-foreground mb-4">Built by People Who Get It</h2>
               <p className="text-muted-foreground text-lg leading-relaxed">
                 Our founding team went through the same struggles — countless rejected applications, confusing job boards,
-                and no one to guide them. We built MB Career Connect because we wished it had existed when we were starting out.
+                and no one to guide them. We built MB Career Phagwara because we wished it had existed when we were starting out.
               </p>
             </motion.div>
 
