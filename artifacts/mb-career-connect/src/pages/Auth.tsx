@@ -10,10 +10,11 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { loadProfileFromStorage } from '@/lib/profile';
+import { loadProfileFromApi } from '@/lib/profile';
 
-function getPostLoginRoute(): string {
-  const profile = loadProfileFromStorage();
+/** After sign-in, check Firestore for whether onboarding is complete */
+async function getPostLoginRoute(): Promise<string> {
+  const profile = await loadProfileFromApi();
   return profile?.onboardingCompleted ? '/dashboard' : '/onboarding';
 }
 
@@ -66,7 +67,7 @@ export function Login() {
         title: "Success",
         description: "Signed in successfully!",
       });
-      setLocation(getPostLoginRoute());
+      setLocation(await getPostLoginRoute());
     } catch (err: any) {
       toast({
         title: "Sign In Failed",
@@ -86,7 +87,7 @@ export function Login() {
         title: "Success",
         description: "Signed in with Google successfully!",
       });
-      setLocation(getPostLoginRoute());
+      setLocation(await getPostLoginRoute());
     } catch (err: any) {
       toast({
         title: "Google Sign In Failed",

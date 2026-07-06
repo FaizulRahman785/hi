@@ -92,6 +92,18 @@ export function getProfileCompletion(profile: UserProfile | null | undefined) {
   return Math.min(100, Math.round((filled / fields.length) * 100));
 }
 
+/** Cache helper — localStorage is read-only secondary source */
+function cacheToStorage(profile: UserProfile) {
+  try {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+    }
+  } catch {
+    // Storage quota exceeded — ignore
+  }
+}
+
+/** Fast read from localStorage cache (used only as offline fallback) */
 export function loadProfileFromStorage(): UserProfile | null {
   if (typeof window === 'undefined') return null;
   const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -112,79 +124,97 @@ export function loadProfileFromStorage(): UserProfile | null {
   }
 }
 
-export async function loadProfileFromApi(emailOrUid = ''): Promise<UserProfile | null> {
+/**
+ * PRIMARY READ — loads profile from Firestore (source of truth).
+ * Falls back to localStorage if Firestore is unreachable.
+ * Pass the user's UID for authenticated reads.
+ */
+export async function loadProfileFromApi(uidOrEmail = ''): Promise<UserProfile | null> {
   if (typeof window === 'undefined') return null;
 
-  // Don't attempt Firestore reads if user is not authenticated — avoids permission errors
   const currentUser = auth.currentUser;
-  if (!currentUser && !emailOrUid) return null;
+  const refId = currentUser?.uid || uidOrEmail;
+  if (!refId) return null;
+
+  // Must be authenticated for Firestore reads
+  if (!currentUser) return loadProfileFromStorage();
 
   try {
-    const refId = currentUser?.uid || emailOrUid;
-    if (!refId) return null;
-
+    // Primary lookup by UID
     const docRef = doc(db, 'profiles', refId);
     const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) {
-      // Query by email if refId is an email and doc was not found by UID
-      if (emailOrUid.includes('@')) {
-        const docRefEmail = doc(db, 'profiles', emailOrUid);
-        const docSnapEmail = await getDoc(docRefEmail);
-        if (docSnapEmail.exists()) {
-          const data = docSnapEmail.data();
-          return {
-            ...getDefaultProfile(emailOrUid),
-            ...data,
-            skills: Array.isArray(data.skills) ? data.skills : [],
-            languages: Array.isArray(data.languages) ? data.languages : [],
-            certifications: Array.isArray(data.certifications) ? data.certifications : [],
-            achievements: Array.isArray(data.achievements) ? data.achievements : [],
-            onboardingCompleted: Boolean(data.onboardingCompleted),
-          } as UserProfile;
-        }
-      }
-      return null;
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const profile: UserProfile = {
+        ...getDefaultProfile(data.email ?? currentUser.email ?? ''),
+        ...data,
+        skills: Array.isArray(data.skills) ? data.skills : [],
+        languages: Array.isArray(data.languages) ? data.languages : [],
+        certifications: Array.isArray(data.certifications) ? data.certifications : [],
+        achievements: Array.isArray(data.achievements) ? data.achievements : [],
+        onboardingCompleted: Boolean(data.onboardingCompleted),
+      } as UserProfile;
+      // Update local cache
+      cacheToStorage(profile);
+      return profile;
     }
 
-    const data = docSnap.data();
-    return {
-      ...getDefaultProfile(data.email ?? currentUser?.email ?? ''),
-      ...data,
-      skills: Array.isArray(data.skills) ? data.skills : [],
-      languages: Array.isArray(data.languages) ? data.languages : [],
-      certifications: Array.isArray(data.certifications) ? data.certifications : [],
-      achievements: Array.isArray(data.achievements) ? data.achievements : [],
-      onboardingCompleted: Boolean(data.onboardingCompleted),
-    } as UserProfile;
-  } catch (error: any) {
-    // Suppress expected permissions errors when user is unauthenticated
-    if (error?.code !== 'permission-denied') {
-      console.error('Error loading profile from Firestore:', error);
+    // Fallback: try email-keyed doc (legacy)
+    if (currentUser.email) {
+      const emailDocRef = doc(db, 'profiles', currentUser.email);
+      const emailDocSnap = await getDoc(emailDocRef);
+      if (emailDocSnap.exists()) {
+        const data = emailDocSnap.data();
+        const profile: UserProfile = {
+          ...getDefaultProfile(currentUser.email),
+          ...data,
+          skills: Array.isArray(data.skills) ? data.skills : [],
+          languages: Array.isArray(data.languages) ? data.languages : [],
+          certifications: Array.isArray(data.certifications) ? data.certifications : [],
+          achievements: Array.isArray(data.achievements) ? data.achievements : [],
+          onboardingCompleted: Boolean(data.onboardingCompleted),
+        } as UserProfile;
+        cacheToStorage(profile);
+        return profile;
+      }
     }
-    return null;
+
+    return null; // No profile yet (new user)
+  } catch (error: any) {
+    if (error?.code === 'permission-denied') {
+      // Firestore rules not deployed yet — fall back to localStorage cache silently
+      return loadProfileFromStorage();
+    }
+    console.error('Firestore profile read error:', error);
+    return loadProfileFromStorage();
   }
 }
 
-export async function saveProfile(profile: UserProfile) {
-  if (typeof window !== 'undefined') {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-  }
+/**
+ * PRIMARY WRITE — saves profile to Firestore (source of truth).
+ * Also writes to localStorage cache.
+ * Throws if Firestore write fails (caller should handle / show error).
+ */
+export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
+  // Always update localStorage cache immediately
+  cacheToStorage(profile);
 
-  try {
-    const refId = auth.currentUser?.uid || profile.email;
-    if (!refId) return profile;
+  const currentUser = auth.currentUser;
+  const refId = currentUser?.uid || profile.email;
+  if (!refId) return profile;
 
-    const docRef = doc(db, 'profiles', refId);
-    await setDoc(docRef, {
+  const docRef = doc(db, 'profiles', refId);
+  await setDoc(
+    docRef,
+    {
       ...profile,
-      uid: auth.currentUser?.uid || null,
+      uid: currentUser?.uid ?? null,
+      email: currentUser?.email ?? profile.email,
       updatedAt: new Date().toISOString(),
-    }, { merge: true });
-  } catch (_error) {
-    // Firestore save is best-effort — localStorage is the primary store.
-    // Errors here are expected if Firestore rules aren't deployed yet.
-  }
+    },
+    { merge: true },
+  );
 
   return profile;
 }

@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import {
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
-import { getProfileCompletion, loadProfileFromApi, loadProfileFromStorage, saveProfile, type UserProfile } from '@/lib/profile';
+import { getProfileCompletion, saveProfile, type UserProfile } from '@/lib/profile';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 
 const navItems = [
@@ -124,34 +124,21 @@ const upcomingEvents = [
 ];
 
 export function Dashboard() {
-  const { user, logout } = useAuth();
+  const { user, logout, profile: authProfile, profileLoading } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    const checkOnboarding = async () => {
-      let currentProfile = loadProfileFromStorage();
-      if ((!currentProfile || !currentProfile.onboardingCompleted) && user?.email) {
-        const remote = await loadProfileFromApi(user.email);
-        if (remote) {
-          currentProfile = remote;
-        }
-      }
-
-      if (currentProfile) {
-        setProfile(currentProfile);
-        if (!currentProfile.onboardingCompleted) {
-          setLocation('/onboarding');
-        }
-      } else {
+    if (authProfile) {
+      setProfile(authProfile);
+      if (!authProfile.onboardingCompleted) {
         setLocation('/onboarding');
       }
-    };
-
-    if (user) {
-      void checkOnboarding();
+    } else if (!profileLoading && user) {
+      // No profile found at all → send to onboarding
+      setLocation('/onboarding');
     }
-  }, [user, setLocation]);
+  }, [authProfile, profileLoading, user, setLocation]);
 
   const completion = useMemo(() => {
     if (!profile) return 0;
@@ -301,27 +288,16 @@ export function Dashboard() {
 
 // ─── PROFILE ───────────────────────────────────────────────────────────────────
 export function Profile() {
-  const { user, logout } = useAuth();
+  const { user, logout, profile: authProfile, refreshProfile } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
 
+  // Initialize local edit state from Firestore-backed AuthContext profile
   useEffect(() => {
-    const loadData = async () => {
-      const stored = loadProfileFromStorage();
-      setProfile(stored);
-
-      if (stored?.email) {
-        const remote = await loadProfileFromApi(stored.email);
-        if (remote) {
-          setProfile(remote);
-        }
-      }
-    };
-
-    void loadData();
-  }, []);
+    if (authProfile) setProfile(authProfile);
+  }, [authProfile]);
 
   const updateField = <K extends keyof UserProfile>(field: K, value: UserProfile[K]) => {
     setProfile((prev) => (prev ? { ...prev, [field]: value } : prev));
@@ -342,6 +318,7 @@ export function Profile() {
 
       const savedProfile = await saveProfile(finalizedProfile);
       setProfile(savedProfile);
+      await refreshProfile(); // Re-sync AuthContext from Firestore
       setEditing(false);
       setMessage('Profile saved successfully.');
     } finally {

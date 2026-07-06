@@ -14,10 +14,11 @@ const steps = ['Personal', 'Education', 'Career', 'Professional', 'About'];
 
 export function Onboarding() {
   const [, setLocation] = useLocation();
-  const { user } = useAuth();
+  const { user, profile: authProfile, refreshProfile } = useAuth();
   const [step, setStep] = useState(0);
   const [profile, setProfile] = useState<UserProfile>(() => getDefaultProfile(user?.email ?? ''));
   const [message, setMessage] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
   
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [isUploadingResume, setIsUploadingResume] = useState(false);
@@ -55,12 +56,13 @@ export function Onboarding() {
   };
 
   useEffect(() => {
-    const existing = loadProfileFromStorage();
-    if (existing) {
-      const merged = { ...getDefaultProfile(user?.email ?? ''), ...existing, email: user?.email ?? existing.email };
-      setProfile(merged);
+    // Prefer Firestore profile from AuthContext (source of truth),
+    // fall back to localStorage cache if not yet loaded
+    const source = authProfile ?? loadProfileFromStorage();
+    if (source) {
+      setProfile({ ...getDefaultProfile(user?.email ?? ''), ...source, email: user?.email ?? source.email });
     }
-  }, [user?.email]);
+  }, [authProfile, user?.email]);
 
   const completion = useMemo(() => getProfileCompletion(profile), [profile]);
 
@@ -101,9 +103,18 @@ export function Onboarding() {
       updatedAt: new Date().toISOString(),
     };
 
-    await saveProfile(finalizedProfile);
-    setMessage('Profile saved! Taking you to your dashboard...');
-    setTimeout(() => setLocation('/dashboard'), 600);
+    setIsSaving(true);
+    setMessage('Saving your profile...');
+    try {
+      await saveProfile(finalizedProfile);
+      await refreshProfile(); // Re-sync AuthContext from Firestore
+      setMessage('Profile saved! Taking you to your dashboard...');
+      setTimeout(() => setLocation('/dashboard'), 600);
+    } catch (err: any) {
+      setMessage(`Save failed: ${err.message || 'Please check your connection and try again.'}`);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!isFirebaseConfigured) {
@@ -299,11 +310,19 @@ export function Onboarding() {
               </div>
             )}
 
-            {message ? <p className="mt-4 text-sm text-destructive">{message}</p> : null}
+            {message ? (
+              <p className={`mt-4 text-sm ${message.startsWith('Save failed') ? 'text-destructive' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                {message}
+              </p>
+            ) : null}
 
             <div className="mt-6 flex justify-between">
-              <Button variant="outline" onClick={() => setStep((value) => Math.max(0, value - 1))} disabled={step === 0}>Back</Button>
-              <Button onClick={handleNext}>{step === steps.length - 1 ? 'Finish onboarding' : 'Continue'}</Button>
+              <Button variant="outline" onClick={() => setStep((value) => Math.max(0, value - 1))} disabled={step === 0 || isSaving}>Back</Button>
+              <Button onClick={handleNext} disabled={isSaving}>
+                {step === steps.length - 1
+                  ? (isSaving ? 'Saving...' : 'Finish onboarding')
+                  : 'Continue'}
+              </Button>
             </div>
           </motion.div>
         </div>
