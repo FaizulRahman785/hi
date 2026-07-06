@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -102,8 +102,8 @@ export function Onboarding() {
     };
 
     await saveProfile(finalizedProfile);
-    setMessage('Profile saved successfully. Redirecting to your dashboard...');
-    setTimeout(() => setLocation('/dashboard'), 600);
+    setMessage('Profile saved successfully. Redirecting to home page...');
+    setTimeout(() => setLocation('/'), 600);
   };
 
   if (!isFirebaseConfigured) {

@@ -1,12 +1,15 @@
-﻿import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Search, MapPin, Briefcase, ChevronRight, CheckCircle, Phone, Mail, MessageCircle, Building, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useAuth } from '@/contexts/AuthContext';
+import { loadProfileFromApi, loadProfileFromStorage } from '@/lib/profile';
+import { isFirebaseConfigured } from '@/firebase/config';
 
 import { StatCard } from '@/components/StatCard';
 import { OpportunityCard } from '@/components/OpportunityCard';
@@ -30,6 +33,35 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export function Home() {
+  const { user, loading } = useAuth();
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!user) {
+      if (isFirebaseConfigured) {
+        setLocation('/login');
+      }
+      return;
+    }
+
+    const checkOnboarding = async () => {
+      let profile = loadProfileFromStorage();
+      if ((!profile || !profile.onboardingCompleted) && user.email) {
+        const remote = await loadProfileFromApi(user.email);
+        if (remote) {
+          profile = remote;
+        }
+      }
+      if (!profile || !profile.onboardingCompleted) {
+        setLocation('/onboarding');
+      }
+    };
+
+    void checkOnboarding();
+  }, [user, loading, setLocation]);
+
   const [emblaRef] = useEmblaCarousel({ loop: true, align: 'start' });
   const { theme } = useTheme();
   const heroRef = useRef(null);
