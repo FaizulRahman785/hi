@@ -10,7 +10,7 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { loadProfileFromApi } from '@/lib/profile';
+import { loadProfileFromApi, saveProfile } from '@/lib/profile';
 
 /** After sign-in, check Firestore for whether onboarding is complete */
 async function getPostLoginRoute(): Promise<string> {
@@ -309,6 +309,8 @@ export function Register() {
         degree: '',
         branch: '',
         graduationYear: '',
+        semester: '',
+        cgpa: '',
         currentStatus: activeRole,
         skills: [],
         interests: '',
@@ -321,27 +323,16 @@ export function Register() {
         githubUrl: '',
         linkedinUrl: '',
         profilePhotoUrl: '',
+        languages: [],
+        certifications: [],
+        achievements: [],
         onboardingCompleted: false,
         profileCompletion: 0,
         updatedAt: new Date().toISOString(),
       };
 
-      // Store locally
-      localStorage.setItem('mb-profile', JSON.stringify(initialProfile));
-
-      // Attempt to store in API
-      const apiBase = import.meta.env.VITE_API_BASE_URL ?? '';
-      if (apiBase) {
-        try {
-          await fetch(`${apiBase}/api/profile`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(initialProfile),
-          });
-        } catch {
-          // Fail silently
-        }
-      }
+      // Save immediately to Firestore (primary) and localStorage (cache)
+      await saveProfile(initialProfile);
 
       toast({
         title: "Success",
