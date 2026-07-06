@@ -6,7 +6,6 @@ import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import { CustomCursor } from '@/components/CustomCursor';
 import { ScrollProgress, BackToTop } from '@/components/ScrollEffects';
 
 // Existing pages
@@ -352,11 +351,31 @@ function AnimatedSwitch() {
 }
 
 function App() {
+  useEffect(() => {
+    let timer: number;
+    const handleScroll = () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      if (!document.body.classList.contains('disable-hover')) {
+        document.body.classList.add('disable-hover');
+      }
+      timer = window.setTimeout(() => {
+        document.body.classList.remove('disable-hover');
+      }, 150);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
-          <CustomCursor />
           <ScrollProgress />
           <BackToTop />
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>

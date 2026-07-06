@@ -187,15 +187,9 @@ html {
   transition: none !important;
 }
 
-body.has-custom-cursor {
-  cursor: none;
-}
-
-body.has-custom-cursor a,
-body.has-custom-cursor button,
-body.has-custom-cursor [role="button"],
-body.has-custom-cursor [data-cursor="pointer"] {
-  cursor: none;
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important;
 }
 
 @layer base {
