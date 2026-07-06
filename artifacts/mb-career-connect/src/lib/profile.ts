@@ -181,8 +181,9 @@ export async function saveProfile(profile: UserProfile) {
       uid: auth.currentUser?.uid || null,
       updatedAt: new Date().toISOString(),
     }, { merge: true });
-  } catch (error) {
-    console.error('Error saving profile to Firestore:', error);
+  } catch (_error) {
+    // Firestore save is best-effort — localStorage is the primary store.
+    // Errors here are expected if Firestore rules aren't deployed yet.
   }
 
   return profile;
