@@ -46,6 +46,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { isFirebaseConfigured } from '@/firebase/config';
+import { loadProfileFromStorage } from '@/lib/profile';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -64,6 +65,27 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (!user && isFirebaseConfigured) {
     return null;
   }
+
+  return <>{children}</>;
+}
+
+// Redirect logged-in users away from login / register pages
+function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (!loading && user && isFirebaseConfigured) {
+      const profile = loadProfileFromStorage();
+      setLocation(profile?.onboardingCompleted ? '/dashboard' : '/onboarding');
+    }
+  }, [loading, user, setLocation]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>;
+  }
+
+  if (user && isFirebaseConfigured) return null;
 
   return <>{children}</>;
 }
@@ -202,8 +224,20 @@ function AnimatedSwitch() {
           </Route>
 
           {/* Auth */}
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
+          <Route path="/login">
+            {() => (
+              <PublicOnlyRoute>
+                <Login />
+              </PublicOnlyRoute>
+            )}
+          </Route>
+          <Route path="/register">
+            {() => (
+              <PublicOnlyRoute>
+                <Register />
+              </PublicOnlyRoute>
+            )}
+          </Route>
 
           {/* Info pages */}
           <Route path="/contact" component={Contact} />

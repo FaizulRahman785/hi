@@ -375,17 +375,26 @@ html {
   -webkit-text-fill-color: transparent;
 }
 
+/* Disable all hover effects while scrolling (class toggled by App.tsx) */
+body.disable-hover *,
+body.disable-hover *::before,
+body.disable-hover *::after {
+  pointer-events: none !important;
+  transition: none !important;
+  animation-play-state: paused !important;
+}
+
 /* Theme-aware card hover */
 .card-hover {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
-.card-hover:hover {
+body:not(.disable-hover) .card-hover:hover {
   transform: translateY(-3px) scale(1.01);
   box-shadow: var(--card-shadow), 0 0 0 1px hsl(var(--primary) / 0.2);
 }
 
 /* Premium button pulse */
-.btn-glow:hover {
+body:not(.disable-hover) .btn-glow:hover {
   box-shadow: 0 0 20px var(--glow-color);
 }
 

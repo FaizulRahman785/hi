@@ -10,6 +10,12 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { loadProfileFromStorage } from '@/lib/profile';
+
+function getPostLoginRoute(): string {
+  const profile = loadProfileFromStorage();
+  return profile?.onboardingCompleted ? '/dashboard' : '/onboarding';
+}
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -60,7 +66,7 @@ export function Login() {
         title: "Success",
         description: "Signed in successfully!",
       });
-      setLocation('/dashboard');
+      setLocation(getPostLoginRoute());
     } catch (err: any) {
       toast({
         title: "Sign In Failed",
@@ -80,7 +86,7 @@ export function Login() {
         title: "Success",
         description: "Signed in with Google successfully!",
       });
-      setLocation('/dashboard');
+      setLocation(getPostLoginRoute());
     } catch (err: any) {
       toast({
         title: "Google Sign In Failed",

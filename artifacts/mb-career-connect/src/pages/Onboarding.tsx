@@ -102,8 +102,8 @@ export function Onboarding() {
     };
 
     await saveProfile(finalizedProfile);
-    setMessage('Profile saved successfully. Redirecting to home page...');
-    setTimeout(() => setLocation('/'), 600);
+    setMessage('Profile saved! Taking you to your dashboard...');
+    setTimeout(() => setLocation('/dashboard'), 600);
   };
 
   if (!isFirebaseConfigured) {
