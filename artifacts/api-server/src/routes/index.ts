@@ -60,11 +60,11 @@ async function verifyFirebaseUser(req: any) {
     throw new Error("Firebase token verification is not configured.");
   }
 
-  const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`, {
+  const response = (await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idToken: token }),
-  });
+  })) as any;
 
   if (!response.ok) return null;
 
