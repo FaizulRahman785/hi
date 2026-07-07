@@ -106,7 +106,8 @@ export function Onboarding() {
     setIsSaving(true);
     setMessage('Saving your profile...');
     try {
-      await saveProfile(finalizedProfile);
+      // Pass uid explicitly to avoid any auth.currentUser timing race
+      await saveProfile(finalizedProfile, user?.uid ?? undefined);
       await refreshProfile(); // Re-sync AuthContext from Firestore
       setMessage('Profile saved! Taking you to your dashboard...');
       setTimeout(() => setLocation('/dashboard'), 600);

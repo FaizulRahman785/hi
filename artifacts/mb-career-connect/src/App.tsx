@@ -95,13 +95,13 @@ function AnimatedSwitch() {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="popLayout">
       <motion.div
         key={location}
-        initial={prefersReduced ? { opacity: 1 } : { opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={prefersReduced ? { opacity: 1 } : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
         exit={prefersReduced ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.15 }}
         className="flex-grow flex flex-col"
       >
         <Switch location={location}>

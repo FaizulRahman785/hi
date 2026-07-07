@@ -11,6 +11,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { loadProfileFromApi, saveProfile } from '@/lib/profile';
+import { auth } from '@/firebase/config';
 
 /** After sign-in, check Firestore for whether onboarding is complete */
 async function getPostLoginRoute(): Promise<string> {
@@ -294,9 +295,13 @@ export function Register() {
 
     setIsLoading(true);
     try {
+      // Step 1: Create the Firebase Auth account
       await signUp(email, password);
 
-      // Create and persist initial profile data
+      // Step 2: Grab the newly created user's UID immediately
+      const uid = auth.currentUser?.uid;
+
+      // Step 3: Build and save the initial profile to Firestore
       const fullName = `${firstName} ${lastName}`.trim();
       const initialProfile = {
         fullName,
@@ -331,12 +336,23 @@ export function Register() {
         updatedAt: new Date().toISOString(),
       };
 
-      // Save immediately to Firestore (primary) and localStorage (cache)
-      await saveProfile(initialProfile);
+      try {
+        // Pass uid explicitly — avoids any auth.currentUser timing race
+        await saveProfile(initialProfile, uid);
+      } catch (saveErr: any) {
+        // Profile save failed (likely Firestore rules). User can still proceed
+        // to onboarding and save their full profile there.
+        console.error('Initial profile save failed:', saveErr);
+        toast({
+          title: "Profile Save Warning",
+          description: "Could not save initial profile to Firebase. You can still complete setup in onboarding.",
+          variant: "destructive"
+        });
+      }
 
       toast({
-        title: "Success",
-        description: "Verification link sent! Let's get you set up.",
+        title: "Account Created!",
+        description: "Welcome! Let's complete your profile.",
       });
       setLocation('/onboarding');
     } catch (err: any) {

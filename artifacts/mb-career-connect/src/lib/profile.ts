@@ -194,14 +194,17 @@ export async function loadProfileFromApi(uidOrEmail = ''): Promise<UserProfile |
 /**
  * PRIMARY WRITE — saves profile to Firestore (source of truth).
  * Also writes to localStorage cache.
+ * Pass `uid` explicitly if calling immediately after account creation
+ * to avoid any auth.currentUser timing race.
  * Throws if Firestore write fails (caller should handle / show error).
  */
-export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
+export async function saveProfile(profile: UserProfile, uid?: string): Promise<UserProfile> {
   // Always update localStorage cache immediately
   cacheToStorage(profile);
 
   const currentUser = auth.currentUser;
-  const refId = currentUser?.uid || profile.email;
+  // Prefer explicitly passed uid, then auth.currentUser, then fall back to email-keyed doc
+  const refId = uid ?? currentUser?.uid ?? profile.email;
   if (!refId) return profile;
 
   const docRef = doc(db, 'profiles', refId);
@@ -209,7 +212,7 @@ export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
     docRef,
     {
       ...profile,
-      uid: currentUser?.uid ?? null,
+      uid: uid ?? currentUser?.uid ?? null,
       email: currentUser?.email ?? profile.email,
       updatedAt: new Date().toISOString(),
     },
@@ -218,3 +221,4 @@ export async function saveProfile(profile: UserProfile): Promise<UserProfile> {
 
   return profile;
 }
+
