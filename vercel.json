@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "pnpm --filter @workspace/mb-career-connect run build",
+  "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 pnpm --filter @workspace/mb-career-connect run build",
   "outputDirectory": "artifacts/mb-career-connect/dist/public",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "rewrites": [
