@@ -43,3 +43,5 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+.api-dev.log
+.vite-dev.log

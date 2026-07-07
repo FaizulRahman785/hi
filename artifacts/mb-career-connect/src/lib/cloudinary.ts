@@ -1,13 +1,33 @@
-export async function uploadToCloudinary(file: File, folder = 'mb-career-connect'): Promise<string> {
+import { auth } from '@/firebase/config';
+
+export interface CloudinaryUploadResult {
+  secureUrl: string;
+  publicId: string;
+  resourceType: string;
+  bytes: number;
+  format: string;
+  originalFilename: string;
+}
+
+export async function uploadToCloudinary(file: File, folder = 'mb-career-connect'): Promise<CloudinaryUploadResult> {
+  const token = await auth.currentUser?.getIdToken();
+  if (!token) {
+    throw new Error('You must be signed in before uploading files.');
+  }
+
   const apiBase = import.meta.env.VITE_API_BASE_URL ?? '';
   const response = await fetch(`${apiBase}/api/uploads/cloudinary-sign`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({ folder }),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to get Cloudinary upload signature from backend.');
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.error || 'Failed to get Cloudinary upload signature from backend.');
   }
 
   const { cloudName, apiKey, timestamp, signature } = await response.json();
@@ -33,5 +53,12 @@ export async function uploadToCloudinary(file: File, folder = 'mb-career-connect
   }
 
   const data = await uploadResponse.json();
-  return data.secure_url;
+  return {
+    secureUrl: data.secure_url,
+    publicId: data.public_id,
+    resourceType: data.resource_type,
+    bytes: data.bytes ?? file.size,
+    format: data.format ?? '',
+    originalFilename: data.original_filename ?? file.name,
+  };
 }

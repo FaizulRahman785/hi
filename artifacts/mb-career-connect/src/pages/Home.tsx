@@ -10,6 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { useAuth } from '@/contexts/AuthContext';
 
 import { isFirebaseConfigured } from '@/firebase/config';
+import { isProfileComplete } from '@/lib/profile';
 
 import { StatCard } from '@/components/StatCard';
 import { OpportunityCard } from '@/components/OpportunityCard';
@@ -45,7 +46,7 @@ export function Home() {
     }
 
     // Redirect to onboarding if profile not yet completed
-    if (!profile || !profile.onboardingCompleted) {
+    if (!profile || !profile.onboardingCompleted || !isProfileComplete(profile)) {
       setLocation('/onboarding');
     }
   }, [user, loading, profile, profileLoading, setLocation]);

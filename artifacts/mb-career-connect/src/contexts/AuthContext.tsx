@@ -13,8 +13,8 @@ import {
   handleGoogleRedirectResult,
 } from '@/firebase/auth';
 import {
+  clearProfileCache,
   loadProfileFromApi,
-  loadProfileFromStorage,
   type UserProfile,
 } from '@/lib/profile';
 
@@ -40,26 +40,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(false);
 
-  /** Load / reload profile from Firestore (source of truth) */
   const fetchProfile = async (firebaseUser: User) => {
     setProfileLoading(true);
     try {
       const firestoreProfile = await loadProfileFromApi(firebaseUser.uid);
-      setProfile(firestoreProfile ?? loadProfileFromStorage());
+      setProfile(firestoreProfile);
     } catch {
-      setProfile(loadProfileFromStorage());
+      setProfile(null);
     } finally {
       setProfileLoading(false);
     }
   };
 
-  /** Manually re-fetch profile (call after saving changes) */
   const refreshProfile = async () => {
     if (user) await fetchProfile(user);
   };
 
   useEffect(() => {
-    // Handle Google redirect sign-in result (fires after redirect back from Google)
     handleGoogleRedirectResult().catch(() => undefined);
 
     const unsubscribe = onAuthStateChanged(auth, async (nextUser) => {
@@ -99,12 +96,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await confirmResetPassword(oobCode, newPassword);
       },
       logout: async () => {
+        const uid = user?.uid;
         await signOut();
         setProfile(null);
-        // Clear localStorage cache on logout
-        if (typeof window !== 'undefined') {
-          window.localStorage.removeItem('mb-profile');
-        }
+        clearProfileCache(uid);
       },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

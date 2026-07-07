@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+﻿import React, { useEffect, useMemo, useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -286,7 +286,7 @@ export function Dashboard() {
   );
 }
 
-// ─── PROFILE ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ PROFILE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export function Profile() {
   const { user, logout, profile: authProfile, refreshProfile } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -294,7 +294,6 @@ export function Profile() {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
 
-  // Initialize local edit state from Firestore-backed AuthContext profile
   useEffect(() => {
     if (authProfile) setProfile(authProfile);
   }, [authProfile]);
@@ -305,22 +304,21 @@ export function Profile() {
 
   const handleSave = async () => {
     if (!profile) return;
-
     setIsSaving(true);
     setMessage('');
-
     try {
       const finalizedProfile = {
         ...profile,
         profileCompletion: getProfileCompletion(profile),
         updatedAt: new Date().toISOString(),
       };
-
       const savedProfile = await saveProfile(finalizedProfile);
       setProfile(savedProfile);
-      await refreshProfile(); // Re-sync AuthContext from Firestore
+      await refreshProfile();
       setEditing(false);
       setMessage('Profile saved successfully.');
+    } catch (err: any) {
+      setMessage(`Save failed: ${err.message || 'Please try again.'}`);
     } finally {
       setIsSaving(false);
     }
@@ -328,50 +326,88 @@ export function Profile() {
 
   return (
     <DashboardLayout active="profile" profile={profile} user={user} onLogout={() => logout()}>
+      {/* Hidden file inputs */}
+      <input type="file" id="banner-upload-input" accept="image/*" className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0]; if (!file) return;
+          try {
+            const upload = await uploadToCloudinary(file, 'cover-images');
+            updateField('coverImageUrl', upload.secureUrl);
+            updateField('coverImagePublicId', upload.publicId);
+            updateField('coverImageResourceType', upload.resourceType);
+            updateField('coverImageBytes', upload.bytes);
+          } catch (err: any) { alert(`Banner upload failed: ${err.message}`); }
+        }}
+      />
+      <input type="file" id="resume-upload-input" accept=".pdf,.doc,.docx" className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0]; if (!file) return;
+          try {
+            const upload = await uploadToCloudinary(file, 'resumes');
+            if (profile) {
+              const updated = { ...profile, resumeUrl: upload.secureUrl, resumePublicId: upload.publicId, resumeResourceType: upload.resourceType, resumeBytes: upload.bytes };
+              setProfile(updated);
+              await saveProfile(updated);
+              await refreshProfile();
+            }
+          } catch (err: any) { alert(`Resume upload failed: ${err.message}`); }
+        }}
+      />
+
       <div className="space-y-6">
+        {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-extrabold text-foreground">My Profile</h1>
             <p className="text-sm text-muted-foreground mt-0.5">Keep your profile current for recruiters and mentors.</p>
           </div>
           <div className="flex gap-2">
-            {editing ? (
-              <Button size="sm" variant="outline" onClick={() => setEditing(false)} className="border-border text-xs">Cancel</Button>
-            ) : null}
+            {editing && (
+              <Button size="sm" variant="outline" onClick={() => { setEditing(false); setMessage(''); }} className="border-border text-xs">
+                Cancel
+              </Button>
+            )}
             <Button size="sm" className="btn-glow gap-2 text-xs" onClick={() => (editing ? handleSave() : setEditing(true))} disabled={isSaving}>
-              <Edit3 className="w-3.5 h-3.5" /> {editing ? (isSaving ? 'Saving...' : 'Save Profile') : 'Edit Profile'}
+              <Edit3 className="w-3.5 h-3.5" />
+              {editing ? (isSaving ? 'Saving...' : 'Save Profile') : 'Edit Profile'}
             </Button>
           </div>
         </div>
 
-        {message ? <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</div> : null}
+        {/* Status message */}
+        {message && (
+          <div className={`rounded-xl border px-4 py-3 text-sm ${message.startsWith('Save failed') ? 'border-destructive/30 bg-destructive/10 text-destructive' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+            {message}
+          </div>
+        )}
 
-        <div className="bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="h-24 bg-gradient-to-r from-primary/30 via-primary/20 to-transparent" />
+        {/* Profile Card with Banner */}
+        <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
+          <div
+            className="h-32 w-full bg-cover bg-center relative"
+            style={{ background: profile?.coverImageUrl ? `url(${profile.coverImageUrl}) center/cover no-repeat` : 'linear-gradient(135deg, hsl(var(--primary)/0.3), hsl(var(--primary)/0.1))' }}
+          >
+            {editing && (
+              <button type="button" onClick={() => document.getElementById('banner-upload-input')?.click()}
+                className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-background/90 backdrop-blur-sm rounded-xl border border-border shadow hover:bg-background transition-colors">
+                <Upload className="w-3 h-3" /> Change Banner
+              </button>
+            )}
+          </div>
           <div className="px-6 pb-6">
-            <div className="-mt-10 flex items-end justify-between mb-5">
-              <div className="w-20 h-20 rounded-2xl overflow-hidden border-4 border-card shadow-lg shrink-0">
+            <div className="-mt-12 flex items-end justify-between mb-5">
+              <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-card shadow-lg shrink-0 bg-background">
                 {profile?.profilePhotoUrl ? (
                   <img src={profile.profilePhotoUrl} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground flex items-center justify-center font-extrabold text-2xl">
+                  <div className="w-full h-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground flex items-center justify-center font-extrabold text-3xl">
                     {profile?.fullName?.slice(0, 2).toUpperCase() ?? 'MB'}
                   </div>
                 )}
               </div>
               <div className="flex gap-2 pb-1">
-                <Button 
-                  size="sm" 
-                  variant="outline" 
-                  className="border-border h-8 text-xs gap-1.5"
-                  onClick={() => {
-                    if (profile?.resumeUrl) {
-                      window.open(profile.resumeUrl, '_blank');
-                    } else {
-                      alert('No resume uploaded yet.');
-                    }
-                  }}
-                >
+                <Button size="sm" variant="outline" className="border-border h-8 text-xs gap-1.5"
+                  onClick={() => { if (profile?.resumeUrl) window.open(profile.resumeUrl, '_blank'); else alert('No resume uploaded yet.'); }}>
                   <Download className="w-3.5 h-3.5" /> Resume
                 </Button>
                 <Button size="sm" variant="outline" className="border-border h-8 text-xs gap-1.5">
@@ -379,170 +415,277 @@ export function Profile() {
                 </Button>
               </div>
             </div>
-            <div className="mb-4">
-              {editing ? (
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="md:col-span-2">
-                    <label className="mb-2 block text-sm font-medium">Full name</label>
-                    <input value={profile?.fullName ?? ''} onChange={(e) => updateField('fullName', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="mb-2 block text-sm font-medium">Profile Photo</label>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        try {
-                          const url = await uploadToCloudinary(file, 'profile-photos');
-                          updateField('profilePhotoUrl', url);
-                        } catch (err: any) {
-                          alert(`Upload failed: ${err.message}`);
-                        }
-                      }} 
-                      className="w-full text-xs text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium">Email</label>
-                    <input value={profile?.email ?? ''} onChange={(e) => updateField('email', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" disabled />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium">Phone</label>
-                    <input value={profile?.phone ?? ''} onChange={(e) => updateField('phone', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium">College</label>
-                    <input value={profile?.college ?? ''} onChange={(e) => updateField('college', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium">Degree</label>
-                    <input value={profile?.degree ?? ''} onChange={(e) => updateField('degree', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="mb-2 block text-sm font-medium">Bio</label>
-                    <textarea value={profile?.bio ?? ''} onChange={(e) => updateField('bio', e.target.value)} className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+
+            {/* Read / Edit sections */}
+            {editing ? (
+              <div className="space-y-6">
+                {/* Personal */}
+                <div>
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Personal &amp; Location</p>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <div className="md:col-span-2">
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Full Name</label>
+                      <input value={profile?.fullName ?? ''} onChange={(e) => updateField('fullName', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Asha Verma" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Profile Photo</label>
+                      <input type="file" accept="image/*"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0]; if (!file) return;
+                          try {
+                            const upload = await uploadToCloudinary(file, 'profile-photos');
+                            updateField('profilePhotoUrl', upload.secureUrl);
+                            updateField('profilePhotoPublicId', upload.publicId);
+                            updateField('profilePhotoResourceType', upload.resourceType);
+                            updateField('profilePhotoBytes', upload.bytes);
+                          } catch (err: any) { alert(`Upload failed: ${err.message}`); }
+                        }}
+                        className="w-full text-xs text-muted-foreground file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Phone</label>
+                      <input value={profile?.phone ?? ''} onChange={(e) => updateField('phone', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="+91 99999 88888" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">City</label>
+                      <input value={profile?.city ?? ''} onChange={(e) => updateField('city', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Mumbai" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">State</label>
+                      <input value={profile?.state ?? ''} onChange={(e) => updateField('state', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Maharashtra" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Country</label>
+                      <input value={profile?.country ?? ''} onChange={(e) => updateField('country', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="India" />
+                    </div>
                   </div>
                 </div>
-              ) : (
-                <>
-                  <h2 className="text-xl font-extrabold text-foreground">{profile?.fullName || user?.displayName || 'Your name'}</h2>
-                  <p className="text-sm text-muted-foreground">{profile?.degree || 'Career seeker'}{profile?.college ? ` · ${profile.college}` : ''}</p>
-                  <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                    <Building2 className="w-3.5 h-3.5 shrink-0" /> {profile?.city || 'Your city'}{profile?.state ? `, ${profile.state}` : ''}
-                  </p>
-                </>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-3 text-xs text-muted-foreground mb-4">
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Mail className="w-3.5 h-3.5" /> {profile?.email || user?.email || 'Add your email'}</a>
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Phone className="w-3.5 h-3.5" /> {profile?.phone || 'Add phone'}</a>
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Linkedin className="w-3.5 h-3.5" /> {profile?.linkedinUrl || 'Add LinkedIn'}</a>
-              <a className="flex items-center gap-1.5 hover:text-primary transition-colors"><Github className="w-3.5 h-3.5" /> {profile?.githubUrl || 'Add GitHub'}</a>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-              {profile?.bio || 'Tell recruiters about your goals, strengths, and the kind of opportunities you want.'}
-            </p>
+                {/* Education */}
+                <div className="border-t border-border pt-5">
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Education Details</p>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <div className="md:col-span-2">
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">College</label>
+                      <input value={profile?.college ?? ''} onChange={(e) => updateField('college', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="IIT Delhi" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Degree</label>
+                      <input value={profile?.degree ?? ''} onChange={(e) => updateField('degree', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="B.Tech" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Branch</label>
+                      <input value={profile?.branch ?? ''} onChange={(e) => updateField('branch', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Computer Science" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Semester</label>
+                      <input value={profile?.semester ?? ''} onChange={(e) => updateField('semester', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="7th" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Passing Year</label>
+                      <input value={profile?.graduationYear ?? ''} onChange={(e) => updateField('graduationYear', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="2026" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">CGPA</label>
+                      <input value={profile?.cgpa ?? ''} onChange={(e) => updateField('cgpa', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="9.2" />
+                    </div>
+                  </div>
+                </div>
+                {/* Career Preferences */}
+                <div className="border-t border-border pt-5">
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Career Preferences</p>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Preferred Job Role</label>
+                      <input value={profile?.preferredCareerPaths ?? ''} onChange={(e) => updateField('preferredCareerPaths', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Software Engineer" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Work Mode</label>
+                      <input value={profile?.workMode ?? ''} onChange={(e) => updateField('workMode', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Hybrid" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Preferred Location</label>
+                      <input value={profile?.preferredJobLocations ?? ''} onChange={(e) => updateField('preferredJobLocations', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Bangalore, Remote" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Interests</label>
+                      <input value={profile?.interests ?? ''} onChange={(e) => updateField('interests', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="AI, Product, Design" />
+                    </div>
+                  </div>
+                </div>
+                {/* Social */}
+                <div className="border-t border-border pt-5">
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Social Profiles</p>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">LinkedIn URL</label>
+                      <input value={profile?.linkedinUrl ?? ''} onChange={(e) => updateField('linkedinUrl', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="https://linkedin.com/in/username" />
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">GitHub URL</label>
+                      <input value={profile?.githubUrl ?? ''} onChange={(e) => updateField('githubUrl', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="https://github.com/username" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Portfolio URL</label>
+                      <input value={profile?.portfolioUrl ?? ''} onChange={(e) => updateField('portfolioUrl', e.target.value)} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="https://yourportfolio.dev" />
+                    </div>
+                  </div>
+                </div>
+                {/* About */}
+                <div className="border-t border-border pt-5">
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-3">About &amp; Details</p>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Bio</label>
+                      <textarea value={profile?.bio ?? ''} onChange={(e) => updateField('bio', e.target.value)} className="min-h-24 w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="Tell recruiters about yourself" />
+                    </div>
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <div>
+                        <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Languages (comma-separated)</label>
+                        <input value={(profile?.languages ?? []).join(', ')} onChange={(e) => updateField('languages', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="English, Hindi" />
+                      </div>
+                      <div>
+                        <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Certifications (comma-separated)</label>
+                        <input value={(profile?.certifications ?? []).join(', ')} onChange={(e) => updateField('certifications', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="AWS, GCP" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Achievements (comma-separated)</label>
+                        <input value={(profile?.achievements ?? []).join(', ')} onChange={(e) => updateField('achievements', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))} className="w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="SIH Winner, Top 10% LeetCode" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Skills (comma-separated)</label>
+                      <textarea value={(profile?.skills ?? []).join(', ')} onChange={(e) => updateField('skills', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))} className="min-h-16 w-full rounded-xl border border-input bg-background/60 px-3.5 py-2 text-sm focus:outline-none" placeholder="React, Node.js, TypeScript" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <h2 className="text-xl font-extrabold text-foreground">{profile?.fullName || user?.displayName || 'Your name'}</h2>
+                <p className="text-sm text-muted-foreground">{profile?.degree || 'Career seeker'}{profile?.branch ? ` (${profile.branch})` : ''}{profile?.college ? ` Â· ${profile.college}` : ''}</p>
+                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                  <MapPin className="w-3.5 h-3.5 shrink-0" /> {profile?.city || 'City'}{profile?.state ? `, ${profile.state}` : ''}{profile?.country ? `, ${profile.country}` : ''}
+                </p>
+                <div className="flex flex-wrap gap-3 text-xs text-muted-foreground mt-4 mb-3">
+                  <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> {profile?.email || user?.email || 'No email'}</span>
+                  {profile?.phone && <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {profile.phone}</span>}
+                  {profile?.linkedinUrl && <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors"><Linkedin className="w-3.5 h-3.5" /> LinkedIn</a>}
+                  {profile?.githubUrl && <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors"><Github className="w-3.5 h-3.5" /> GitHub</a>}
+                  {profile?.portfolioUrl && <a href={profile.portfolioUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-primary transition-colors"><Globe className="w-3.5 h-3.5" /> Portfolio</a>}
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl border-t border-border pt-4">
+                  {profile?.bio || 'Tell recruiters about your goals, strengths, and the kind of opportunities you want.'}
+                </p>
+              </>
+            )}
           </div>
         </div>
 
+        {/* Details grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-5">
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-foreground">Skills</h3>
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-foreground mb-4">Skills</h3>
+              <div className="flex flex-wrap gap-2">
+                {(profile?.skills?.length ? profile.skills : ['Add your strongest skills']).map((skill) => (
+                  <span key={skill} className="px-3 py-1.5 rounded-lg text-sm bg-primary/10 text-primary border border-primary/20 font-medium">{skill}</span>
+                ))}
               </div>
-              {editing ? (
-                <textarea value={(profile?.skills ?? []).join(', ')} onChange={(e) => updateField('skills', e.target.value.split(',').map((item) => item.trim()).filter(Boolean))} className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" placeholder="React, Node.js, TypeScript" />
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {(profile?.skills?.length ? profile.skills : ['Add your strongest skills']).map((skill) => (
-                    <span key={skill} className="px-3 py-1.5 rounded-lg text-sm bg-primary/10 text-primary border border-primary/20 font-medium">{skill}</span>
-                  ))}
-                </div>
-              )}
             </div>
-
-            <div className="bg-card border border-border rounded-2xl p-6">
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
               <h3 className="font-bold text-foreground mb-4">Education</h3>
-              {editing ? (
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium">Degree</label>
-                    <input value={profile?.degree ?? ''} onChange={(e) => updateField('degree', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium">College</label>
-                    <input value={profile?.college ?? ''} onChange={(e) => updateField('college', e.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
-                  </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center shrink-0">
+                  <GraduationCap className="w-5 h-5 text-amber-500" />
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="flex gap-4">
-                    <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center shrink-0">
-                      <GraduationCap className="w-5 h-5 text-amber-500" />
+                <div>
+                  <h4 className="font-semibold text-foreground text-sm">{profile?.degree || 'Degree not set'}{profile?.branch ? ` in ${profile.branch}` : ''}</h4>
+                  <p className="text-xs text-muted-foreground">{profile?.college || 'College not set'}</p>
+                  {profile?.graduationYear && <p className="text-xs text-muted-foreground mt-0.5">Passing Year: {profile.graduationYear}{profile.semester ? ` Â· Semester: ${profile.semester}` : ''}</p>}
+                  {profile?.cgpa && <span className="inline-block mt-2 px-2.5 py-0.5 rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 text-xs font-bold">CGPA: {profile.cgpa}</span>}
+                </div>
+              </div>
+            </div>
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-foreground mb-4">Career Preferences</h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {([
+                  { label: 'Preferred Role', value: profile?.preferredCareerPaths, icon: Briefcase },
+                  { label: 'Work Mode', value: profile?.workMode, icon: Smartphone },
+                  { label: 'Preferred Location', value: profile?.preferredJobLocations, icon: MapPin },
+                  { label: 'Interests', value: profile?.interests, icon: Heart },
+                ] as const).map(({ label, value, icon: Icon }) => (
+                  <div key={label} className="flex gap-3">
+                    <div className="w-9 h-9 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-foreground text-sm">{profile?.degree || 'Degree not set'}</h4>
-                      <p className="text-xs text-muted-foreground">{profile?.college || 'College not set'}</p>
+                      <span className="block text-xs font-semibold text-muted-foreground">{label}</span>
+                      <span className="text-sm font-semibold text-foreground">{value || 'Not set'}</span>
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-foreground mb-4">Certifications &amp; Achievements</h3>
+              <div className="space-y-5">
+                <div>
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Certifications</p>
+                  {profile?.certifications?.length ? (
+                    <div className="flex flex-col gap-2">
+                      {profile.certifications.map((cert) => (
+                        <div key={cert} className="flex items-center gap-2 text-sm bg-muted/40 border border-border/40 rounded-xl p-2">
+                          <Award className="w-4 h-4 text-primary shrink-0" />
+                          <span className="font-medium text-foreground">{cert}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : <p className="text-xs text-muted-foreground italic">No certifications added.</p>}
                 </div>
-              )}
+                <div className="border-t border-border pt-4">
+                  <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Achievements</p>
+                  {profile?.achievements?.length ? (
+                    <div className="flex flex-col gap-2">
+                      {profile.achievements.map((ach) => (
+                        <div key={ach} className="flex items-center gap-2 text-sm bg-muted/40 border border-border/40 rounded-xl p-2">
+                          <Trophy className="w-4 h-4 text-amber-500 shrink-0" />
+                          <span className="font-medium text-foreground">{ach}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : <p className="text-xs text-muted-foreground italic">No achievements added.</p>}
+                </div>
+              </div>
             </div>
           </div>
-
           <div className="space-y-5">
-            <div className="bg-card border border-border rounded-2xl p-6">
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
               <h3 className="font-bold text-foreground mb-3">Resume</h3>
               <div className="border-2 border-dashed border-border rounded-xl p-6 text-center mb-3">
                 <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2 opacity-50" />
-                <p className="text-xs text-muted-foreground truncate">{profile?.resumeUrl ? profile.resumeUrl.split('/').pop() : 'Upload your resume'}</p>
+                <p className="text-xs text-muted-foreground truncate">{profile?.resumeUrl ? profile.resumeUrl.split('/').pop() : 'No resume uploaded'}</p>
               </div>
-              <input
-                type="file"
-                id="resume-upload-input"
-                accept=".pdf,.doc,.docx"
-                className="hidden"
-                onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-                  try {
-                    const url = await uploadToCloudinary(file, 'resumes');
-                    if (profile) {
-                      const updated = { ...profile, resumeUrl: url };
-                      setProfile(updated);
-                      await saveProfile(updated);
-                    }
-                  } catch (err: any) {
-                    alert(`Upload failed: ${err.message}`);
-                  }
-                }}
-              />
               <div className="grid grid-cols-2 gap-2">
-                <Button 
-                  size="sm" 
-                  variant="outline" 
-                  className="border-border text-xs h-9 gap-1.5"
-                  onClick={() => {
-                    if (profile?.resumeUrl) {
-                      window.open(profile.resumeUrl, '_blank');
-                    } else {
-                      alert('No resume uploaded yet.');
-                    }
-                  }}
-                >
+                <Button size="sm" variant="outline" className="border-border text-xs h-9 gap-1.5"
+                  onClick={() => { if (profile?.resumeUrl) window.open(profile.resumeUrl, '_blank'); else alert('No resume uploaded yet.'); }}>
                   <Download className="w-3.5 h-3.5" />Download
                 </Button>
-                <Button 
-                  size="sm" 
-                  className="btn-glow text-xs h-9 gap-1.5"
-                  onClick={() => document.getElementById('resume-upload-input')?.click()}
-                >
+                <Button size="sm" className="btn-glow text-xs h-9 gap-1.5" onClick={() => document.getElementById('resume-upload-input')?.click()}>
                   <Upload className="w-3.5 h-3.5" />Replace
                 </Button>
               </div>
+            </div>
+            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-foreground mb-3">Languages</h3>
+              {profile?.languages?.length ? (
+                <div className="flex flex-wrap gap-2">
+                  {profile.languages.map((lang) => (
+                    <span key={lang} className="px-2.5 py-1 bg-secondary text-secondary-foreground text-xs font-semibold rounded-lg border border-border">{lang}</span>
+                  ))}
+                </div>
+              ) : <p className="text-xs text-muted-foreground italic">No languages added.</p>}
             </div>
           </div>
         </div>

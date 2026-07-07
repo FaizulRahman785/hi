@@ -2,6 +2,7 @@ import { auth, db } from '@/firebase/config';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export interface UserProfile {
+  uid?: string | null;
   fullName: string;
   email: string;
   phone: string;
@@ -26,6 +27,16 @@ export interface UserProfile {
   githubUrl: string;
   linkedinUrl: string;
   profilePhotoUrl: string;
+  profilePhotoPublicId: string;
+  profilePhotoResourceType: string;
+  profilePhotoBytes: number;
+  resumePublicId: string;
+  resumeResourceType: string;
+  resumeBytes: number;
+  coverImageUrl?: string;
+  coverImagePublicId?: string;
+  coverImageResourceType?: string;
+  coverImageBytes?: number;
   languages: string[];
   certifications: string[];
   achievements: string[];
@@ -36,8 +47,48 @@ export interface UserProfile {
 
 const STORAGE_KEY = 'mb-profile';
 
+const requiredProfileChecks: Array<{
+  label: string;
+  isComplete: (profile: UserProfile) => boolean;
+}> = [
+  { label: 'Full Name', isComplete: (profile) => hasText(profile.fullName) },
+  { label: 'Phone Number', isComplete: (profile) => hasText(profile.phone) },
+  { label: 'Country', isComplete: (profile) => hasText(profile.country) },
+  { label: 'State', isComplete: (profile) => hasText(profile.state) },
+  { label: 'City', isComplete: (profile) => hasText(profile.city) },
+  { label: 'Profile Photo', isComplete: (profile) => hasText(profile.profilePhotoUrl) },
+  { label: 'College', isComplete: (profile) => hasText(profile.college) },
+  { label: 'Degree', isComplete: (profile) => hasText(profile.degree) },
+  { label: 'Branch', isComplete: (profile) => hasText(profile.branch) },
+  { label: 'Semester', isComplete: (profile) => hasText(profile.semester) },
+  { label: 'Passing Year', isComplete: (profile) => hasText(profile.graduationYear) },
+  { label: 'CGPA', isComplete: (profile) => hasText(profile.cgpa) },
+  { label: 'Skills', isComplete: (profile) => profile.skills.length > 0 },
+  { label: 'Interests', isComplete: (profile) => hasText(profile.interests) },
+  { label: 'Preferred Job Role', isComplete: (profile) => hasText(profile.preferredCareerPaths) },
+  { label: 'Preferred Work Mode', isComplete: (profile) => hasText(profile.workMode) },
+  { label: 'Preferred Location', isComplete: (profile) => hasText(profile.preferredJobLocations) },
+  { label: 'Resume Upload', isComplete: (profile) => hasText(profile.resumeUrl) },
+  { label: 'GitHub', isComplete: (profile) => hasText(profile.githubUrl) },
+  { label: 'LinkedIn', isComplete: (profile) => hasText(profile.linkedinUrl) },
+  { label: 'Portfolio', isComplete: (profile) => hasText(profile.portfolioUrl) },
+  { label: 'Bio', isComplete: (profile) => hasText(profile.bio) },
+  { label: 'Languages', isComplete: (profile) => profile.languages.length > 0 },
+  { label: 'Certifications', isComplete: (profile) => profile.certifications.length > 0 },
+  { label: 'Achievements', isComplete: (profile) => profile.achievements.length > 0 },
+];
+
+function hasText(value: string | null | undefined) {
+  return Boolean(value?.trim());
+}
+
+function getStorageKey(uid?: string | null) {
+  return uid ? `${STORAGE_KEY}:${uid}` : STORAGE_KEY;
+}
+
 export function getDefaultProfile(email = ''): UserProfile {
   return {
+    uid: null,
     fullName: '',
     email,
     phone: '',
@@ -62,6 +113,16 @@ export function getDefaultProfile(email = ''): UserProfile {
     githubUrl: '',
     linkedinUrl: '',
     profilePhotoUrl: '',
+    profilePhotoPublicId: '',
+    profilePhotoResourceType: '',
+    profilePhotoBytes: 0,
+    resumePublicId: '',
+    resumeResourceType: '',
+    resumeBytes: 0,
+    coverImageUrl: '',
+    coverImagePublicId: '',
+    coverImageResourceType: '',
+    coverImageBytes: 0,
     languages: [],
     certifications: [],
     achievements: [],
@@ -73,40 +134,34 @@ export function getDefaultProfile(email = ''): UserProfile {
 
 export function getProfileCompletion(profile: UserProfile | null | undefined) {
   if (!profile) return 0;
-  const fields = [
-    profile.fullName,
-    profile.phone,
-    profile.city,
-    profile.college,
-    profile.degree,
-    profile.graduationYear,
-    profile.semester,
-    profile.cgpa,
-    profile.currentStatus,
-    profile.skills.length > 0 ? 'skills' : '',
-    profile.bio,
-    profile.resumeUrl,
-  ];
-
-  const filled = fields.filter(Boolean).length;
-  return Math.min(100, Math.round((filled / fields.length) * 100));
+  const filled = requiredProfileChecks.filter(({ isComplete }) => isComplete(profile)).length;
+  return Math.min(100, Math.round((filled / requiredProfileChecks.length) * 100));
 }
 
-/** Cache helper — localStorage is read-only secondary source */
-function cacheToStorage(profile: UserProfile) {
+export function getMissingRequiredProfileFields(profile: UserProfile | null | undefined) {
+  if (!profile) return requiredProfileChecks.map(({ label }) => label);
+  return requiredProfileChecks
+    .filter(({ isComplete }) => !isComplete(profile))
+    .map(({ label }) => label);
+}
+
+export function isProfileComplete(profile: UserProfile | null | undefined) {
+  return getMissingRequiredProfileFields(profile).length === 0;
+}
+
+function cacheToStorage(profile: UserProfile, uid?: string | null) {
   try {
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+      window.localStorage.setItem(getStorageKey(uid ?? profile.uid), JSON.stringify(profile));
     }
   } catch {
-    // Storage quota exceeded — ignore
+    // Storage quota exceeded - ignore cache failure.
   }
 }
 
-/** Fast read from localStorage cache (used only as offline fallback) */
-export function loadProfileFromStorage(): UserProfile | null {
+export function loadProfileFromStorage(uid?: string | null): UserProfile | null {
   if (typeof window === 'undefined') return null;
-  const raw = window.localStorage.getItem(STORAGE_KEY);
+  const raw = window.localStorage.getItem(getStorageKey(uid));
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as UserProfile;
@@ -124,23 +179,22 @@ export function loadProfileFromStorage(): UserProfile | null {
   }
 }
 
-/**
- * PRIMARY READ — loads profile from Firestore (source of truth).
- * Falls back to localStorage if Firestore is unreachable.
- * Pass the user's UID for authenticated reads.
- */
-export async function loadProfileFromApi(uidOrEmail = ''): Promise<UserProfile | null> {
+export function clearProfileCache(uid?: string | null) {
+  if (typeof window === 'undefined') return;
+  window.localStorage.removeItem(STORAGE_KEY);
+  if (uid) {
+    window.localStorage.removeItem(getStorageKey(uid));
+  }
+}
+
+export async function loadProfileFromApi(uid = ''): Promise<UserProfile | null> {
   if (typeof window === 'undefined') return null;
 
   const currentUser = auth.currentUser;
-  const refId = currentUser?.uid || uidOrEmail;
-  if (!refId) return null;
-
-  // Must be authenticated for Firestore reads
-  if (!currentUser) return loadProfileFromStorage();
+  const refId = currentUser?.uid || uid;
+  if (!refId || !currentUser) return null;
 
   try {
-    // Primary lookup by UID
     const docRef = doc(db, 'profiles', refId);
     const docSnap = await getDoc(docRef);
 
@@ -149,76 +203,50 @@ export async function loadProfileFromApi(uidOrEmail = ''): Promise<UserProfile |
       const profile: UserProfile = {
         ...getDefaultProfile(data.email ?? currentUser.email ?? ''),
         ...data,
+        uid: refId,
         skills: Array.isArray(data.skills) ? data.skills : [],
         languages: Array.isArray(data.languages) ? data.languages : [],
         certifications: Array.isArray(data.certifications) ? data.certifications : [],
         achievements: Array.isArray(data.achievements) ? data.achievements : [],
         onboardingCompleted: Boolean(data.onboardingCompleted),
       } as UserProfile;
-      // Update local cache
-      cacheToStorage(profile);
+      cacheToStorage(profile, refId);
       return profile;
     }
 
-    // Fallback: try email-keyed doc (legacy)
-    if (currentUser.email) {
-      const emailDocRef = doc(db, 'profiles', currentUser.email);
-      const emailDocSnap = await getDoc(emailDocRef);
-      if (emailDocSnap.exists()) {
-        const data = emailDocSnap.data();
-        const profile: UserProfile = {
-          ...getDefaultProfile(currentUser.email),
-          ...data,
-          skills: Array.isArray(data.skills) ? data.skills : [],
-          languages: Array.isArray(data.languages) ? data.languages : [],
-          certifications: Array.isArray(data.certifications) ? data.certifications : [],
-          achievements: Array.isArray(data.achievements) ? data.achievements : [],
-          onboardingCompleted: Boolean(data.onboardingCompleted),
-        } as UserProfile;
-        cacheToStorage(profile);
-        return profile;
-      }
-    }
-
-    return null; // No profile yet (new user)
+    return null;
   } catch (error: any) {
     if (error?.code === 'permission-denied') {
-      // Firestore rules not deployed yet — fall back to localStorage cache silently
-      return loadProfileFromStorage();
+      return loadProfileFromStorage(refId);
     }
     console.error('Firestore profile read error:', error);
-    return loadProfileFromStorage();
+    return loadProfileFromStorage(refId);
   }
 }
 
-/**
- * PRIMARY WRITE — saves profile to Firestore (source of truth).
- * Also writes to localStorage cache.
- * Pass `uid` explicitly if calling immediately after account creation
- * to avoid any auth.currentUser timing race.
- * Throws if Firestore write fails (caller should handle / show error).
- */
 export async function saveProfile(profile: UserProfile, uid?: string): Promise<UserProfile> {
-  // Always update localStorage cache immediately
-  cacheToStorage(profile);
-
   const currentUser = auth.currentUser;
-  // Prefer explicitly passed uid, then auth.currentUser, then fall back to email-keyed doc
-  const refId = uid ?? currentUser?.uid ?? profile.email;
-  if (!refId) return profile;
+  const refId = uid ?? currentUser?.uid;
+  if (!refId) {
+    throw new Error('You must be signed in before saving your profile.');
+  }
+
+  const missingFields = profile.onboardingCompleted ? getMissingRequiredProfileFields(profile) : [];
+  if (missingFields.length > 0) {
+    throw new Error(`Complete required profile fields first: ${missingFields.join(', ')}.`);
+  }
+
+  const nextProfile: UserProfile = {
+    ...profile,
+    uid: refId,
+    email: currentUser?.email ?? profile.email,
+    profileCompletion: getProfileCompletion(profile),
+    updatedAt: new Date().toISOString(),
+  };
 
   const docRef = doc(db, 'profiles', refId);
-  await setDoc(
-    docRef,
-    {
-      ...profile,
-      uid: uid ?? currentUser?.uid ?? null,
-      email: currentUser?.email ?? profile.email,
-      updatedAt: new Date().toISOString(),
-    },
-    { merge: true },
-  );
+  await setDoc(docRef, nextProfile, { merge: true });
 
-  return profile;
+  cacheToStorage(nextProfile, refId);
+  return nextProfile;
 }
-

@@ -46,22 +46,37 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { isFirebaseConfigured } from '@/firebase/config';
+import { isProfileComplete } from '@/lib/profile';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  const [, setLocation] = useLocation();
+  const { user, loading, profile, profileLoading } = useAuth();
+  const [location, setLocation] = useLocation();
+
+  const profileReady = !profileLoading;
+  const completedProfile = Boolean(profile?.onboardingCompleted && isProfileComplete(profile));
 
   useEffect(() => {
-    if (!loading && !user && isFirebaseConfigured) {
-      setLocation('/login');
-    }
-  }, [loading, user, setLocation]);
+    if (loading || !isFirebaseConfigured) return;
 
-  if (loading) {
+    if (!user) {
+      setLocation('/login');
+      return;
+    }
+
+    if (profileReady && location !== '/onboarding' && !completedProfile) {
+      setLocation('/onboarding');
+    }
+  }, [completedProfile, loading, location, profileReady, setLocation, user]);
+
+  if (loading || (user && !profileReady)) {
     return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Loading...</div>;
   }
 
   if (!user && isFirebaseConfigured) {
+    return null;
+  }
+
+  if (user && location !== '/onboarding' && !completedProfile) {
     return null;
   }
 
@@ -75,7 +90,7 @@ function PublicOnlyRoute({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading && !profileLoading && user && isFirebaseConfigured) {
-      setLocation(profile?.onboardingCompleted ? '/dashboard' : '/onboarding');
+      setLocation(profile?.onboardingCompleted && isProfileComplete(profile) ? '/dashboard' : '/onboarding');
     }
   }, [loading, profileLoading, user, profile, setLocation]);
 
@@ -362,7 +377,7 @@ function AnimatedSwitch() {
             {() => (
               <ComingSoon
                 title="Career Roadmaps"
-                description="Step-by-step visual roadmaps for 50+ career paths — from fresher to senior, with milestones and curated resources."
+                description="Step-by-step visual roadmaps for 50+ career paths â€” from fresher to senior, with milestones and curated resources."
                 icon={Map}
                 expectedDate="Q3 2025"
                 relatedFeatures={[

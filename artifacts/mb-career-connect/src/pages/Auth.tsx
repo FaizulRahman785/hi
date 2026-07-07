@@ -10,13 +10,13 @@ import { Footer } from '@/components/Footer';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { loadProfileFromApi, saveProfile } from '@/lib/profile';
+import { getDefaultProfile, isProfileComplete, loadProfileFromApi, saveProfile } from '@/lib/profile';
 import { auth } from '@/firebase/config';
 
 /** After sign-in, check Firestore for whether onboarding is complete */
 async function getPostLoginRoute(): Promise<string> {
   const profile = await loadProfileFromApi();
-  return profile?.onboardingCompleted ? '/dashboard' : '/onboarding';
+  return profile?.onboardingCompleted && isProfileComplete(profile) ? '/dashboard' : '/onboarding';
 }
 
 function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -183,7 +183,7 @@ export function Login() {
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
-                    placeholder="••••••••"
+                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     className="pl-10 pr-10 h-12 bg-background/60 border-input"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -304,40 +304,19 @@ export function Register() {
       // Step 3: Build and save the initial profile to Firestore
       const fullName = `${firstName} ${lastName}`.trim();
       const initialProfile = {
+        ...getDefaultProfile(email),
+        uid: uid ?? null,
         fullName,
         email,
         phone,
-        city: '',
-        state: '',
-        country: '',
-        college: '',
-        degree: '',
-        branch: '',
-        graduationYear: '',
-        semester: '',
-        cgpa: '',
         currentStatus: activeRole,
-        skills: [],
-        interests: '',
-        preferredCareerPaths: '',
-        preferredJobLocations: '',
-        workMode: 'Hybrid',
-        bio: '',
-        resumeUrl: '',
-        portfolioUrl: '',
-        githubUrl: '',
-        linkedinUrl: '',
-        profilePhotoUrl: '',
-        languages: [],
-        certifications: [],
-        achievements: [],
         onboardingCompleted: false,
         profileCompletion: 0,
         updatedAt: new Date().toISOString(),
       };
 
       try {
-        // Pass uid explicitly — avoids any auth.currentUser timing race
+        // Pass uid explicitly â€” avoids any auth.currentUser timing race
         await saveProfile(initialProfile, uid);
       } catch (saveErr: any) {
         // Profile save failed (likely Firestore rules). User can still proceed

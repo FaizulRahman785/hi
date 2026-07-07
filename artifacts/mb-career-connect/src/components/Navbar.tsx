@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
   Briefcase, Menu, X, ChevronDown, Sun, Moon, Sparkles,
@@ -253,6 +253,19 @@ export function Navbar() {
                     Dashboard
                   </Button>
                 </Link>
+                <Link href="/profile" data-cursor="pointer">
+                  <Button variant={scrolled || location !== '/' ? 'outline' : 'secondary'}
+                    className={`hover-elevate transition-all ${!scrolled && location === '/' ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'hover:border-primary/50'}`}>
+                    My Profile
+                  </Button>
+                </Link>
+                <Link href="/notifications" data-cursor="pointer">
+                  <Button variant={scrolled || location !== '/' ? 'outline' : 'secondary'}
+                    className={`hover-elevate transition-all flex items-center gap-1.5 ${!scrolled && location === '/' ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'hover:border-primary/50'}`}>
+                    Notifications
+                    <span className="bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-full">5</span>
+                  </Button>
+                </Link>
                 <Button 
                   onClick={() => logout()} 
                   className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground shadow-lg hover:shadow-primary/30 transition-all hover:-translate-y-0.5 active:scale-95 border-0 cursor-pointer"
@@ -332,6 +345,15 @@ export function Navbar() {
                   <>
                     <Link href="/dashboard" onClick={() => setIsOpen(false)}>
                       <Button variant="outline" className="w-full justify-center h-12 text-base rounded-xl">Dashboard</Button>
+                    </Link>
+                    <Link href="/profile" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full justify-center h-12 text-base rounded-xl">My Profile</Button>
+                    </Link>
+                    <Link href="/notifications" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full justify-center h-12 text-base rounded-xl flex items-center justify-center gap-2">
+                        Notifications
+                        <span className="bg-destructive text-destructive-foreground text-xs font-bold px-2 py-0.5 rounded-full">5</span>
+                      </Button>
                     </Link>
                     <Button 
                       onClick={() => { logout(); setIsOpen(false); }} 
